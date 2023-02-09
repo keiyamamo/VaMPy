@@ -17,7 +17,8 @@ def compute_fixed_points(case_path, velocity_degree):
     bm = BoundaryMesh(mesh, 'exterior')
     V_b1 = VectorFunctionSpace(bm, "CG", 1)
     U_b1 = FunctionSpace(bm, "CG", 1)
-    V = VectorFunctionSpace(mesh, "CG", velocity_degree)
+    
+    bmQdg0 = FunctionSpace(bm, 'DG', 0)
 
     n = FacetNormal(mesh)
     
@@ -28,8 +29,18 @@ def compute_fixed_points(case_path, velocity_degree):
         wss_file.read_checkpoint(wss, "WSS")
         wss_file.close()
 
+    # Compute divergence of WSS
+    # FIXME: This will result in a constant over the cell but we want divergence of WSS to be continuous
+    div_wss = Function(bmQdg0)
+    div_wss = project(div(wss), bmQdg0)
+    # Save the divergence of WSS
+    div_wss_path = (case_path / "divWSS.xdmf").__str__()
+    with XDMFFile(MPI.comm_world, div_wss_path) as div_wss_file:
+        div_wss_file.write_checkpoint(div_wss, "divWSS")
+        div_wss_file.close()
+
     from IPython import embed; embed(); exit(1)
-    # NOTE: we want to take the divergence of WSS after this, but first check if WSS is read correctly
+
 
 if __name__ == "__main__":
     folder, nu, rho, dt, velocity_degree, _, _, T, save_frequency, _, start_cycle, step, average_over_cycles \
