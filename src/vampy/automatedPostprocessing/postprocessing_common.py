@@ -157,13 +157,12 @@ class STRESS:
         boundary_mesh = BoundaryMesh(mesh, 'exterior')
         self.bmV = VectorFunctionSpace(boundary_mesh, 'CG', 1)
 
-        # Compute stress tensor
-        sigma = (2 * nu * epsilon(u)) - (p * Identity(len(u)))
-
+        # Compute stress vector
+        F = - 2 * epsilon(u) * nu
+        
         # Compute stress on surface
         n = FacetNormal(mesh)
-        F = -(sigma * n)
-
+                
         # Compute normal and tangential components
         Fn = inner(F, n)  # scalar-valued
         Ft = F - (Fn * n)  # vector-valued

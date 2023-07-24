@@ -140,7 +140,7 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
 
         file_u.read(u, data)
         file_nu.read(nu, data_nu)
-        from IPython import embed; embed(); exit(1)
+
 
         if MPI.rank(MPI.comm_world) == 0:
             timestamp = file_u.attributes(data)["timestamp"]
