@@ -40,8 +40,10 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     """
     # File paths
     file_path_u = path.join(folder, "u.h5")
+    file_path_nu = path.join(folder, "viscosity.h5")
     mesh_path = path.join(folder, "mesh.h5")
     file_u = HDF5File(MPI.comm_world, file_path_u, "r")
+    file_nu = HDF5File(MPI.comm_world, file_path_nu, "r")
 
     # Determine what time step to start post-processing from
     start = int(T / dt / save_frequency * (start_cycle - 1))
@@ -51,6 +53,7 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         print("Reading dataset names")
 
     dataset = get_dataset_names(file_u, start=start, step=step)
+    dataset_nu = get_dataset_names(file_nu, start=start, step=step, vector_filename="/viscosity/vector_%d")
 
     # Read mesh saved as HDF5 format
     mesh = Mesh()
@@ -70,6 +73,7 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         print("Defining functions")
 
     u = Function(V)
+    nu = Function(V)
 
     # RRT
     RRT = Function(U_b1)
@@ -130,11 +134,13 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         print("=" * 10, "Start post processing", "=" * 10)
 
     counter = start
-    for data in dataset:
+    for (data, data_nu) in zip(dataset, dataset_nu):
         # Update file_counter
         counter += 1
 
         file_u.read(u, data)
+        file_nu.read(nu, data_nu)
+        from IPython import embed; embed(); exit(1)
 
         if MPI.rank(MPI.comm_world) == 0:
             timestamp = file_u.attributes(data)["timestamp"]

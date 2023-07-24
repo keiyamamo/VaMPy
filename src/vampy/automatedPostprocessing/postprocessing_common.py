@@ -150,7 +150,7 @@ class STRESS:
         Args:
             u (Function): The velocity field.
             p (Function): The pressure field.
-            nu (float): The kinematic viscosity.
+            nu (float or Function): The kinematic viscosity. In case of Non-Newtonian fluid, this is a function.
             mesh (Mesh): The mesh on which to compute stress.
         """
         boundary_ds = Measure("ds", domain=mesh)
@@ -230,11 +230,12 @@ def get_dataset_names(data_file, num_files=100000, step=1, start=1, print_info=T
     check = True
     # Find start file
     t0 = time()
+
     while check:
         if data_file.has_dataset(vector_filename % start):
             check = False
             start -= step
-
+            print("Start index:", start)
         start += step
 
     # Get names
