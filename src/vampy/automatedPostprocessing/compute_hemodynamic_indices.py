@@ -68,12 +68,13 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     V_b1 = VectorFunctionSpace(bm, "CG", 1)
     U_b1 = FunctionSpace(bm, "CG", 1)
     V = VectorFunctionSpace(mesh, "CG", velocity_degree)
+    U = FunctionSpace(mesh, "CG", velocity_degree)
 
     if MPI.rank(MPI.comm_world) == 0:
         print("Defining functions")
 
     u = Function(V)
-    nu = Function(V)
+    nu = Function(U) # visocity
 
     # RRT
     RRT = Function(U_b1)
