@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,8 +37,8 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -156,6 +156,8 @@ const thebe_selector_output = ".output, .cell_output"
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conda.html">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Installing with Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="issues.html">Known issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
@@ -373,6 +375,8 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.check_if_closed_surface">check_if_closed_surface() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.checkIfThereIsHoles">checkIfThereIsHoles() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.checkIfThereIsNonTriangleCells">checkIfThereIsNonTriangleCells() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
@@ -513,6 +517,12 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.simulation.simulation_common.get_file_paths">get_file_paths() (in module vampy.simulation.simulation_common)</a>
 </li>
+      <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.get_files_for_cycle_averaging">get_files_for_cycle_averaging() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
+</li>
+      <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.get_files_for_phase_averaging">get_files_for_phase_averaging() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
+</li>
+      <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.get_furtest_surface_point">get_furtest_surface_point() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.get_regions_to_refine">get_regions_to_refine() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.GetAlpha">GetAlpha() (vampy.automatedPreprocessing.ImportData.Element method)</a>
@@ -535,12 +545,12 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.GetInPointsx0">GetInPointsx0() (vampy.automatedPreprocessing.ImportData.Element method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.GetInPointsx0Id">GetInPointsx0Id() (vampy.automatedPreprocessing.ImportData.Element method)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.GetLength">GetLength() (vampy.automatedPreprocessing.ImportData.Element method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.GetListProbePoints">GetListProbePoints() (in module vampy.automatedPreprocessing.ImportData)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.GetListsUniqueBlankedBranches">GetListsUniqueBlankedBranches() (in module vampy.automatedPreprocessing.ImportData)</a>
@@ -718,9 +728,9 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.rate_of_dissipation">rate_of_dissipation() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
+      <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.rate_of_dissipation">rate_of_dissipation() (in module vampy.automatedPostprocessing.postprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.rate_of_strain">rate_of_strain() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
+      <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.rate_of_strain">rate_of_strain() (in module vampy.automatedPostprocessing.postprocessing_common)</a>
 </li>
       <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.read_command_line">read_command_line() (in module vampy.automatedPostprocessing.postprocessing_common)</a>
 
@@ -1015,9 +1025,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1027,7 +1043,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1051,7 +1067,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Mar 14, 2023.
+  Last updated on Aug 02, 2023.
   <br/>
 </p>
   </div>
@@ -1060,7 +1076,7 @@ By Henrik A. Kjeldsberg
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1069,8 +1085,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

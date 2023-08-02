@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Installation &#8212; VaMPy</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,8 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'installation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Known issues" href="issues.html" />
+    <link rel="next" title="Installing with conda" href="conda.html" />
     <link rel="prev" title="VaMPy - The Vascular Modeling Pypeline" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -159,6 +159,8 @@ const thebe_selector_output = ".output, .cell_output"
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conda.html">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Installing with Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="issues.html">Known issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
@@ -372,15 +374,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-vampy-using-conda">Installing VaMPy using <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#editable-installations">Editable installations</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-oasis">Installing Oasis</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-vampy-using-docker">Running VaMPy using Docker</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#note-on-docker">Note on Docker</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-with-conda">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-with-docker">Installing with Docker</a></li>
 </ul>
             </nav>
         </div>
@@ -394,69 +390,33 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
-<section id="installing-vampy-using-conda">
-<h2>Installing VaMPy using <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#installing-vampy-using-conda" title="Permalink to this heading">#</a></h2>
-<p>We recommend installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> and its dependencies through <code class="docutils literal notranslate"><span class="pre">conda</span></code>.<br />
-Start by cloning into the repository:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KVSLab/VaMPy.git
-<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>VaMPy
-</pre></div>
-</div>
-<p>Then, using the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file in the root of the repository, you can call:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>update<span class="w"> </span>--file<span class="w"> </span>environment.yml<span class="w"> </span>--name<span class="w"> </span>your_environment
-</pre></div>
-</div>
-<p>Next, can now activate your environment by running::</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>your_environment
-</pre></div>
-</div>
-<p>Finally, install <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> inside your <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
-</pre></div>
-</div>
-<p>Now you are all set, and can start using the Vascular Modeling Pypeline.</p>
+<p><code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> is a pure Python package that combines the morphological processing tools of
+<a class="reference external" href="https://github.com/KVSlab/morphMan">morphMan</a> and <a class="reference external" href="http://www.vmtk.org/">vmtk</a>, the computational fluid dynamics
+solver <a class="reference external" href="https://github.com/mikaem/Oasis">Oasis</a>, and the finite element computing
+platform <a class="reference external" href="https://fenicsproject.org/">FEniCS</a> into a powerful and user-friendly computational fluid dynamics pipeline.</p>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
+<p>The dependencies of <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> are:</p>
+<ul class="simple">
+<li><p>Python &gt;= 3.8</p></li>
+<li><p>FEniCS &gt;= 2018.1</p></li>
+<li><p>morphMan &gt;= 1.2</p></li>
+<li><p>vmtk &gt;= 1.4.0</p></li>
+<li><p>Oasis &gt;= 2018.1</p></li>
+<li><p>paramiko &gt;= 3.0</p></li>
+<li><p>cppimport &gt;= 22.8.2</p></li>
+</ul>
 </section>
-<section id="editable-installations">
-<h2>Editable installations<a class="headerlink" href="#editable-installations" title="Permalink to this heading">#</a></h2>
-<p>If you want to make changes to any of the underlying packages, you should remove them from the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file,
-and install them from source, as described for <code class="docutils literal notranslate"><span class="pre">Oasis</span></code> in the next section.</p>
-<section id="installing-oasis">
-<h3>Installing Oasis<a class="headerlink" href="#installing-oasis" title="Permalink to this heading">#</a></h3>
-<p>To install an editable version of <a class="reference external" href="https://github.com/mikaem/Oasis">Oasis</a> on your machine, run the following commands
-inside your conda environment:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mikaem/Oasis
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>cppimport
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>--editable<span class="w"> </span>Oasis
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">--editable</span></code> flag installs the project in editable mode meaning that any changes to the original package will be
-reflected directly in your environment.</p>
+<section id="installing-with-conda">
+<h2>Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#installing-with-conda" title="Permalink to this heading">#</a></h2>
+<p>To install <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> and all its dependencies to a <em>local environment</em>, we recommend using <code class="docutils literal notranslate"><span class="pre">conda</span></code>.
+Instructions for installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code>
+with <code class="docutils literal notranslate"><span class="pre">conda</span></code> can be found <a class="reference internal" href="conda.html#install-conda"><span class="std std-ref">here</span></a>.</p>
 </section>
-</section>
-<section id="running-vampy-using-docker">
-<h2>Running VaMPy using Docker<a class="headerlink" href="#running-vampy-using-docker" title="Permalink to this heading">#</a></h2>
-<p>A <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> is supplied in the root directory of the repository, which can build a docker-image with all dependencies
-installed. The Docker-image can be built with the following command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>name_of_image<span class="w"> </span>-f<span class="w"> </span>docker/Dockerfile<span class="w"> </span>.
-</pre></div>
-</div>
-<p>A Docker-container can then be started with the following command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-ti<span class="w"> </span>--network<span class="o">=</span>host<span class="w"> </span>-e<span class="w"> </span><span class="nv">DISPLAY</span><span class="o">=</span><span class="nv">$DISPLAY</span><span class="w"> </span>-v<span class="w"> </span>/tmp/.X11-unix:/tmp/.X11-unix<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/root/shared<span class="w"> </span>-w<span class="w"> </span>/root/shared<span class="w"> </span>--rm<span class="w"> </span>--shm-size<span class="o">=</span>512m<span class="w"> </span>name_of_image
-</pre></div>
-</div>
-<p>To run the VaMPy GUI, you need to call:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>xhost<span class="w"> </span>+local:root
-</pre></div>
-</div>
-<p>on your system before running the scripts.</p>
-<section id="note-on-docker">
-<h3>Note on Docker<a class="headerlink" href="#note-on-docker" title="Permalink to this heading">#</a></h3>
-<p>Remember to call:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">xhost -local:root</span>
-</pre></div>
-</div>
-<p>on the host system when you are done running the Docker container.</p>
-</section>
+<section id="installing-with-docker">
+<h2>Installing with Docker<a class="headerlink" href="#installing-with-docker" title="Permalink to this heading">#</a></h2>
+<p>To install <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> and all its dependencies to an <em>isolated environment</em>, we recommend using the dedicated Docker
+container. Instructions for installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> with Docker can be found <a class="reference internal" href="docker.html#install-docker"><span class="std std-ref">here</span></a>.</p>
 </section>
 </section>
 
@@ -486,7 +446,10 @@ installed. The Docker-image can be built with the following command:</p>
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="index.html"
@@ -498,15 +461,18 @@ installed. The Docker-image can be built with the following command:</p>
       </div>
     </a>
     <a class="right-next"
-       href="issues.html"
+       href="conda.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Known issues</p>
+        <p class="prev-next-title">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -521,15 +487,9 @@ installed. The Docker-image can be built with the following command:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-vampy-using-conda">Installing VaMPy using <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#editable-installations">Editable installations</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-oasis">Installing Oasis</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-vampy-using-docker">Running VaMPy using Docker</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#note-on-docker">Note on Docker</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-with-conda">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-with-docker">Installing with Docker</a></li>
 </ul>
   </nav></div>
 
@@ -538,7 +498,7 @@ installed. The Docker-image can be built with the following command:</p>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -562,7 +522,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Mar 14, 2023.
+  Last updated on Aug 02, 2023.
   <br/>
 </p>
   </div>
@@ -571,7 +531,7 @@ By Henrik A. Kjeldsberg
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -580,8 +540,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

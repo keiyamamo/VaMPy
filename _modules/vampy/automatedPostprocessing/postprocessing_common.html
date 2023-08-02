@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,8 +37,8 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -156,6 +156,8 @@ const thebe_selector_output = ".output, .cell_output"
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conda.html">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Installing with Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../issues.html">Known issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
@@ -328,7 +330,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">MPI</span><span class="p">,</span> <span class="n">assemble</span><span class="p">,</span> <span class="n">interpolate</span><span class="p">,</span> <span class="n">Measure</span><span class="p">,</span> <span class="n">FacetNormal</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">VectorFunctionSpace</span><span class="p">,</span> \
-    <span class="n">BoundaryMesh</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">FacetArea</span><span class="p">,</span> <span class="n">TestFunction</span><span class="p">,</span> <span class="n">FunctionSpace</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">inner</span>
+    <span class="n">BoundaryMesh</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">FacetArea</span><span class="p">,</span> <span class="n">TestFunction</span><span class="p">,</span> <span class="n">FunctionSpace</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">sqrt</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;allow_extrapolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -428,9 +430,58 @@ document.write(`
     <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="rate_of_strain"><a class="viewcode-back" href="../../../api.html#vampy.automatedPostprocessing.postprocessing_common.rate_of_strain">[docs]</a><span class="k">def</span> <span class="nf">rate_of_strain</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes rate of strain</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        strain (Function): Function to save rate of strain to</span>
+<span class="sd">        u (Function): Function for velocity field</span>
+<span class="sd">        v (Function): Test function for velocity</span>
+<span class="sd">        mesh: Mesh to compute strain rate on</span>
+<span class="sd">        h (float): Cell diameter of mesh</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">epsilon</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">eps</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="n">strain</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+    <span class="n">strain</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="s2">&quot;insert&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rate_of_dissipation"><a class="viewcode-back" href="../../../api.html#vampy.automatedPostprocessing.postprocessing_common.rate_of_dissipation">[docs]</a><span class="k">def</span> <span class="nf">rate_of_dissipation</span><span class="p">(</span><span class="n">dissipation</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">nu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes rate of dissipation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dissipation (Function): Function to save rate of dissipation to</span>
+<span class="sd">        u (Function): Function for velocity field</span>
+<span class="sd">        v (Function): Test function for velocity</span>
+<span class="sd">        mesh: Mesh to compute dissipation rate on</span>
+<span class="sd">        h (float): Cell diameter of mesh</span>
+<span class="sd">        nu (float): Viscosity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">epsilon</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="n">dissipation</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+    <span class="n">dissipation</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="s2">&quot;insert&quot;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="STRESS"><a class="viewcode-back" href="../../../api.html#vampy.automatedPostprocessing.postprocessing_common.STRESS">[docs]</a><span class="k">class</span> <span class="nc">STRESS</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the stress on a given mesh based on provided velocity and pressure fields.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">mesh</span><span class="p">):</span>
-        <span class="n">ds</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the StressComputer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u (Function): The velocity field.</span>
+<span class="sd">            p (Function): The pressure field.</span>
+<span class="sd">            nu (float): The kinematic viscosity.</span>
+<span class="sd">            mesh (Mesh): The mesh on which to compute stress.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">boundary_ds</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
         <span class="n">boundary_mesh</span> <span class="o">=</span> <span class="n">BoundaryMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s1">&#39;exterior&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bmV</span> <span class="o">=</span> <span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="n">boundary_mesh</span><span class="p">,</span> <span class="s1">&#39;CG&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
@@ -458,9 +509,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftv</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ln</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">Fn</span> <span class="o">*</span> <span class="n">ds</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ltv</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">)</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">Ft</span><span class="p">)</span> <span class="o">*</span> <span class="n">ds</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Lt</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_l2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftv</span><span class="p">))</span> <span class="o">*</span> <span class="n">ds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ln</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">Fn</span> <span class="o">*</span> <span class="n">boundary_ds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ltv</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">)</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">Ft</span><span class="p">)</span> <span class="o">*</span> <span class="n">boundary_ds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Lt</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_l2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftv</span><span class="p">))</span> <span class="o">*</span> <span class="n">boundary_ds</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -544,9 +595,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -556,7 +613,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -580,7 +637,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Mar 14, 2023.
+  Last updated on Aug 02, 2023.
   <br/>
 </p>
   </div>
@@ -589,7 +646,7 @@ By Henrik A. Kjeldsberg
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -598,8 +655,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

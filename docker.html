@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Tutorials &#8212; VaMPy</title>
+    <title>Installing with Docker &#8212; VaMPy</title>
   
   
   
@@ -61,11 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docker';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="High-resolution CFD simulation in the internal carotid artery" href="artery.html" />
-    <link rel="prev" title="Features and issues" href="features.html" />
+    <link rel="next" title="Known issues" href="issues.html" />
+    <link rel="prev" title="Installing with conda" href="conda.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,10 +157,10 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="conda.html">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="docker.html">Installing with Docker</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installing with Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="issues.html">Known issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
@@ -173,8 +173,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="features.html">Features and issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tutorials</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="artery.html">High-resolution CFD simulation in the internal carotid artery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atrium.html">Hemodynamic simulation in the left atrium and left atrial appendage</a></li>
 </ul>
@@ -252,7 +252,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/kvslab/VaMPy/issues/new?title=Issue%20on%20page%20%2Ftutorials.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/kvslab/VaMPy/issues/new?title=Issue%20on%20page%20%2Fdocker.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -282,7 +282,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/tutorials.md" target="_blank"
+      <li><a href="_sources/docker.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -364,7 +364,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Tutorials</h1>
+    <h1>Installing with Docker</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -374,7 +374,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#link-to-tutorials">Link to tutorials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-pull-the-docker-image">Step 1: Pull the Docker image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-run-the-docker-container">Step 2: Run the Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-verify-the-installation">Step 3: Verify the installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-our-own-docker-image">Building our own docker image</a></li>
 </ul>
             </nav>
         </div>
@@ -386,25 +390,53 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading">#</a></h1>
-<p>These tutorials are meant to guide the user through the basic steps of performing a computational fluid dynamic (CFD)
-simulation in a vascular body. The tutorials are divided into two main problems where we will first consider a model of
-the <a class="reference external" href="https://en.wikipedia.org/wiki/Internal_carotid_artery">internal carotid artery</a> (ICA)
-with an aneurysm, followed by a model of the <a class="reference external" href="https://en.wikipedia.org/wiki/Atrium_(heart)">left atrium</a>. For the ICA,
-we will demonstrate different approaches for meshing and pre-processing of the model, followed by a CFD simulation using
-the Oasis software, before post-processing the results. For the left atrium model, we will investigate local refinement
-in a user-defined region, also followed by CFD simulation and post-processing of the results.</p>
-<p>We assume that you have VaMPy installed, meaning you have a working version
-of <a class="reference external" href="https://github.com/KVSlab/morphMan">morphMan</a> and <a class="reference external" href="https://github.com/mikaem/Oasis">Oasis</a> on your computer. It is
-also beneficial, but not necessary, that you are familiar with the <a class="reference external" href="https://www.paraview.org/">ParaView</a>
-visualization software, which we will frequently be using to visualize the geometries and results.</p>
-<section id="link-to-tutorials">
-<h2>Link to tutorials<a class="headerlink" href="#link-to-tutorials" title="Permalink to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="installing-with-docker">
+<span id="install-docker"></span><h1>Installing with Docker<a class="headerlink" href="#installing-with-docker" title="Permalink to this heading">#</a></h1>
+<p>Installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> through Docker may be a good choice if you want to work in an isolated environment that doesn’t
+interfere with your system’s existing libraries or dependencies. Our Docker image contains <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> with its
+dependencies, and can be run on any operating system that supports Docker. The image is built to support the AMD64
+architecture, making it compatible with most modern CPUs.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="artery.html#tutorial-artery"><span class="std std-ref">Internal carotid artery</span></a></p></li>
-<li><p><a class="reference internal" href="atrium.html#tutorial-atrium"><span class="std std-ref">Left atrium</span></a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a> must be installed on your system.</p></li>
 </ul>
+</section>
+<section id="step-1-pull-the-docker-image">
+<h2>Step 1: Pull the Docker image<a class="headerlink" href="#step-1-pull-the-docker-image" title="Permalink to this heading">#</a></h2>
+<p>You can pull the Docker image for the latest <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> package from its
+official <a class="reference external" href="https://github.com/KVSlab/VaMPy/pkgs/container/vampy">GitHub container registry</a> using the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/kvslab/vampy:latest
+</pre></div>
+</div>
+</section>
+<section id="step-2-run-the-docker-container">
+<h2>Step 2: Run the Docker container<a class="headerlink" href="#step-2-run-the-docker-container" title="Permalink to this heading">#</a></h2>
+<p>After pulling the Docker image, you can run the container using the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ghcr.io/kvslab/vampy:latest
+</pre></div>
+</div>
+</section>
+<section id="step-3-verify-the-installation">
+<h2>Step 3: Verify the installation<a class="headerlink" href="#step-3-verify-the-installation" title="Permalink to this heading">#</a></h2>
+<p>You can verify that <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> is installed correctly by downloading the test dependencies, and running the tests using the
+following commands:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="o">[</span>test<span class="o">]</span>
+<span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests<span class="w"> </span>
+</pre></div>
+</div>
+</section>
+<section id="building-our-own-docker-image">
+<h2>Building our own docker image<a class="headerlink" href="#building-our-own-docker-image" title="Permalink to this heading">#</a></h2>
+<p>Instead of pulling the Docker image for <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> from GitHub, you can build it yourself using the provided <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.
+The Dockerfile can be found in the <code class="docutils literal notranslate"><span class="pre">docker</span></code> folder located in the root of the project repository.</p>
+<p>To build the Docker image, open a terminal window and navigate to the <code class="docutils literal notranslate"><span class="pre">docker</span></code> folder of the project. Then, execute the
+following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker build -t vampy .</span>
+</pre></div>
+</div>
+<p>This command will use the instructions in the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to create a Docker image with the name <code class="docutils literal notranslate"><span class="pre">vampy</span></code>. Once the
+Docker image is built, you can run a container from it using the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command.</p>
 </section>
 </section>
 
@@ -440,20 +472,20 @@ visualization software, which we will frequently be using to visualize the geome
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="features.html"
+       href="conda.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Features and issues</p>
+        <p class="prev-next-title">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></p>
       </div>
     </a>
     <a class="right-next"
-       href="artery.html"
+       href="issues.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">High-resolution CFD simulation in the internal carotid artery</p>
+        <p class="prev-next-title">Known issues</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -475,7 +507,11 @@ visualization software, which we will frequently be using to visualize the geome
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#link-to-tutorials">Link to tutorials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-pull-the-docker-image">Step 1: Pull the Docker image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-run-the-docker-container">Step 2: Run the Docker container</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-verify-the-installation">Step 3: Verify the installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-our-own-docker-image">Building our own docker image</a></li>
 </ul>
   </nav></div>
 

@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,8 +37,8 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -156,6 +156,8 @@ const thebe_selector_output = ".output, .cell_output"
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conda.html">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Installing with Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../issues.html">Known issues</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
@@ -324,7 +326,8 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for vampy.automatedPreprocessing.preprocessing_common</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span></span><span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">morphman</span> <span class="kn">import</span> <span class="n">vtk_clean_polydata</span><span class="p">,</span> <span class="n">vtk_triangulate_surface</span><span class="p">,</span> <span class="n">get_parameters</span><span class="p">,</span> <span class="n">write_parameters</span><span class="p">,</span> <span class="n">read_polydata</span><span class="p">,</span> \
@@ -332,6 +335,7 @@ document.write(`
     <span class="n">get_distance</span><span class="p">,</span> <span class="n">get_number_of_arrays</span><span class="p">,</span> <span class="n">vmtk_smooth_surface</span><span class="p">,</span> <span class="n">get_point_data_array</span><span class="p">,</span> <span class="n">create_vtk_array</span><span class="p">,</span> \
     <span class="n">get_vtk_point_locator</span><span class="p">,</span> <span class="n">vtk_extract_feature_edges</span><span class="p">,</span> <span class="n">get_uncapped_surface</span><span class="p">,</span> <span class="n">vtk_compute_connectivity</span><span class="p">,</span> \
     <span class="n">vtk_compute_mass_properties</span><span class="p">,</span> <span class="n">extract_single_line</span><span class="p">,</span> <span class="n">get_centerline_tolerance</span>
+
 <span class="kn">from</span> <span class="nn">vampy.automatedPreprocessing</span> <span class="kn">import</span> <span class="n">ImportData</span>
 <span class="kn">from</span> <span class="nn">vampy.automatedPreprocessing.NetworkBoundaryConditions</span> <span class="kn">import</span> <span class="n">FlowSplitting</span>
 <span class="kn">from</span> <span class="nn">vampy.automatedPreprocessing.vmtk_pointselector</span> <span class="kn">import</span> <span class="n">vmtkPickPointSeedSelector</span>
@@ -865,6 +869,7 @@ document.write(`
     <span class="n">meshGenerator</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">surface</span>
     <span class="n">meshGenerator</span><span class="o">.</span><span class="n">ElementSizeMode</span> <span class="o">=</span> <span class="s2">&quot;edgelengtharray&quot;</span>  <span class="c1"># Variable size mesh</span>
     <span class="n">meshGenerator</span><span class="o">.</span><span class="n">TargetEdgeLengthArrayName</span> <span class="o">=</span> <span class="s2">&quot;Size&quot;</span>  <span class="c1"># Variable size mesh</span>
+    <span class="n">meshGenerator</span><span class="o">.</span><span class="n">LogOn</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">add_boundary_layer</span><span class="p">:</span>
         <span class="n">meshGenerator</span><span class="o">.</span><span class="n">BoundaryLayer</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">meshGenerator</span><span class="o">.</span><span class="n">NumberOfSubLayers</span> <span class="o">=</span> <span class="mi">4</span>
@@ -1056,13 +1061,27 @@ document.write(`
     <span class="n">write_polydata</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">file_name_vtu_mesh</span><span class="p">)</span>
 
     <span class="c1"># Write mesh to FEniCS to format</span>
-    <span class="n">meshWriter</span> <span class="o">=</span> <span class="n">vmtkscripts</span><span class="o">.</span><span class="n">vmtkMeshWriter</span><span class="p">()</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">CellEntityIdsArrayName</span> <span class="o">=</span> <span class="s2">&quot;CellEntityIds&quot;</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">Mesh</span> <span class="o">=</span> <span class="n">mesh</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">Mode</span> <span class="o">=</span> <span class="s2">&quot;ascii&quot;</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">Compressed</span> <span class="o">=</span> <span class="n">compress_mesh</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">OutputFileName</span> <span class="o">=</span> <span class="n">file_name_xml_mesh</span>
-    <span class="n">meshWriter</span><span class="o">.</span><span class="n">Execute</span><span class="p">()</span></div>
+    <span class="k">if</span> <span class="n">compress_mesh</span><span class="p">:</span>
+        <span class="n">file_name_xml_mesh</span> <span class="o">+=</span> <span class="s1">&#39;.gz&#39;</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">vtkvmtk</span><span class="o">.</span><span class="n">vtkvmtkDolfinWriter</span><span class="p">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">SetInputData</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">SetFileName</span><span class="p">(</span><span class="n">file_name_xml_mesh</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">SetBoundaryDataArrayName</span><span class="p">(</span><span class="s2">&quot;CellEntityIds&quot;</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">SetBoundaryDataIdOffset</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">SetStoreCellMarkers</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--- Writing Dolfin file&#39;</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+
+    <span class="c1"># Compress mesh locally to bypass VMTK issue</span>
+    <span class="k">if</span> <span class="n">compress_mesh</span><span class="p">:</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name_xml_mesh</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">gzfile</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name_xml_mesh</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">gzfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="n">gzfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="add_flow_extension"><a class="viewcode-back" href="../../../api.html#vampy.automatedPreprocessing.preprocessing_common.add_flow_extension">[docs]</a><span class="k">def</span> <span class="nf">add_flow_extension</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">centerlines</span><span class="p">,</span> <span class="n">include_outlet</span><span class="p">,</span> <span class="n">extension_length</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
@@ -1144,6 +1163,45 @@ document.write(`
     <span class="n">scaled_surface</span> <span class="o">=</span> <span class="n">surface_scaler</span><span class="o">.</span><span class="n">Surface</span>
 
     <span class="k">return</span> <span class="n">scaled_surface</span></div>
+
+
+<div class="viewcode-block" id="get_furtest_surface_point"><a class="viewcode-back" href="../../../api.html#vampy.automatedPreprocessing.preprocessing_common.get_furtest_surface_point">[docs]</a><span class="k">def</span> <span class="nf">get_furtest_surface_point</span><span class="p">(</span><span class="n">inlet</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the furthest point on a given surface from a specified inlet point.</span>
+<span class="sd">    It iterates over each point on the surface, calculating its distance from the inlet and updates</span>
+<span class="sd">    the furthest distance accordingly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inlet (list): A list with the inlet point.</span>
+<span class="sd">        surface (vtkPolyData): The surface to check for the furthest point.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        outlets (list): The x, y, z coordinates of the furthest point on the surface from the inlet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outlets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">end_point_distance</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">GetNumberOfPoints</span><span class="p">()):</span>
+        <span class="n">tmp_p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">get_distance</span><span class="p">(</span><span class="n">inlet</span><span class="p">,</span> <span class="n">tmp_p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="o">&gt;</span> <span class="n">end_point_distance</span><span class="p">:</span>
+            <span class="n">end_point_distance</span> <span class="o">=</span> <span class="n">dx</span>
+            <span class="n">outlets</span> <span class="o">=</span> <span class="n">tmp_p</span>
+    <span class="k">return</span> <span class="n">outlets</span></div>
+
+
+<div class="viewcode-block" id="check_if_closed_surface"><a class="viewcode-back" href="../../../api.html#vampy.automatedPreprocessing.preprocessing_common.check_if_closed_surface">[docs]</a><span class="k">def</span> <span class="nf">check_if_closed_surface</span><span class="p">(</span><span class="n">surface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Checks if the given surface is capped (i.e., has no feature edges).</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">          surface (vtkPolyData): The surface to check for capping.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          bool: True if the surface is capped, False otherwise.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+
+    <span class="n">cells</span> <span class="o">=</span> <span class="n">vtk_extract_feature_edges</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cells</span><span class="o">.</span><span class="n">GetNumberOfCells</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span></div>
 </pre></div>
 
                 </article>
@@ -1152,9 +1210,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1164,7 +1228,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1188,7 +1252,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Mar 14, 2023.
+  Last updated on Aug 02, 2023.
   <br/>
 </p>
   </div>
@@ -1197,7 +1261,7 @@ By Henrik A. Kjeldsberg
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1206,8 +1270,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>
