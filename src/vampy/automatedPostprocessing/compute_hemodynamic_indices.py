@@ -74,7 +74,7 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         print("Defining functions")
 
     u = Function(V)
-    nu = Function(U) # visocity
+    nu = Function(U)
 
     # RRT
     RRT = Function(U_b1)

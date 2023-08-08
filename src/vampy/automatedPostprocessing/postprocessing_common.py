@@ -159,7 +159,6 @@ class STRESS:
 
         # Compute stress vector 
         sigma = 2 * nu * epsilon(u) 
-        
         # Compute stress on surface
         n = FacetNormal(mesh)
                 
