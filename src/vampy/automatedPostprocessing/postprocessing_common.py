@@ -2,7 +2,8 @@ import argparse
 from time import time
 
 from dolfin import parameters, MPI, assemble, interpolate, Measure, FacetNormal, Identity, VectorFunctionSpace, \
-    BoundaryMesh, Function, FacetArea, TestFunction, FunctionSpace, grad, inner
+    BoundaryMesh, Function, FacetArea, TestFunction, FunctionSpace, grad, inner, TensorFunctionSpace, TrialFunction, \
+    solve
 
 try:
     parameters["allow_extrapolation"] = True
@@ -110,7 +111,6 @@ class STRESS:
 
         # Compute stress tensor
         sigma = (2 * nu * epsilon(u)) - (p * Identity(len(u)))
-
         # Compute stress on surface
         n = FacetNormal(mesh)
         F = -(sigma * n)
@@ -118,11 +118,23 @@ class STRESS:
         # Compute normal and tangential components
         Fn = inner(F, n)  # scalar-valued
         Ft = F - (Fn * n)  # vector-valued
-
         # Integrate against piecewise constants on the boundary
-        scalar = FunctionSpace(mesh, 'DG', 0)
         vector = VectorFunctionSpace(mesh, 'CG', 1)
+        scalar = FunctionSpace(mesh, 'DG', 0)
         scaling = FacetArea(mesh)  # Normalise the computed stress relative to the size of the element
+        
+        # Perform projection of tesnor to TensorFunctionSpace
+        # grad_u = epsilon(u)
+        # p_i = p * Identity(len(u))
+        # T = TensorFunctionSpace(mesh, 'CG', 1)
+        # I want to perform project(grad_u, T) but without using the project function
+        # Instead, use solve function
+        # ut = TrialFunction(T)
+        # v = TestFunction(T)
+        # uh = Function(T)
+        # dx = Measure("dx", domain=mesh)
+        # solve(inner(ut, v) * dx == inner(grad_u, v) * dx, uh, solver_parameters={"linear_solver": "mumps"})
+        # from IPython import embed; embed(); exit(1)
 
         v = TestFunction(scalar)
         w = TestFunction(vector)
@@ -131,7 +143,6 @@ class STRESS:
         self.Fn = Function(scalar)
         self.Ftv = Function(vector)
         self.Ft = Function(scalar)
-
         self.Ln = 1 / scaling * v * Fn * ds
         self.Ltv = 1 / (2 * scaling) * inner(w, Ft) * ds
         self.Lt = 1 / scaling * inner(v, self.norm_l2(self.Ftv)) * ds

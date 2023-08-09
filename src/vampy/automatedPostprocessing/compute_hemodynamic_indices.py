@@ -1,9 +1,9 @@
 from os import path
 
 from dolfin import Function, VectorFunctionSpace, FunctionSpace, parameters, MPI, HDF5File, Mesh, XDMFFile, \
-    BoundaryMesh, project, inner
+    BoundaryMesh, project, inner, TrialFunction, TensorFunctionSpace, TestFunction, Measure, solve, Identity, FacetNormal, assemble
 
-from vampy.automatedPostprocessing.postprocessing_common import STRESS, read_command_line, get_dataset_names
+from vampy.automatedPostprocessing.postprocessing_common import STRESS, read_command_line, get_dataset_names, epsilon
 
 try:
     parameters["reorder_dofs_serial"] = False
@@ -104,8 +104,9 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     twssg = Function(V_b1)
     tau_prev = Function(V_b1)
     print("Compute Stress with pressure")
-    stress = STRESS(u, p, nu, mesh)
 
+    stress = STRESS(u, p, nu, mesh)
+    
     # Get number of saved steps and cycles
     saved_time_steps_per_cycle = int(T / dt / save_frequency / step)
     n_cycles = int(len(dataset) / saved_time_steps_per_cycle)
@@ -136,6 +137,20 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     if MPI.rank(MPI.comm_world) == 0:
         print("=" * 10, "Start post processing", "=" * 10)
 
+    T = VectorFunctionSpace(mesh, 'CG', 1)
+    ut = TrialFunction(T)
+    v = TestFunction(T)
+    uh = Function(T)
+    ph = Function(T)
+    dx = Measure("dx", domain=mesh)
+    n = FacetNormal(mesh)
+    ds = Measure("ds", domain=mesh)
+    # a = inner(ut,v)*ds
+    # l = inner(n, v)*ds
+    # A = assemble(a, keep_diagonal=True)
+    # L = assemble(l)
+    # solve(A, ph.vector(), L)
+    
     counter = start
     for (data, data_p) in zip(dataset, dataset_p):
         # Update file_counter
@@ -143,6 +158,14 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
 
         file_u.read(u, data)
         file_p.read(p, data_p)
+        grad_u = epsilon(u)
+        pi = p * Identity(3)
+        F = - (pi * n)
+        Fn = inner(F, n)
+        Ft = F - Fn * n
+        solve(inner(ut, v) * ds == inner(Ft, v) * ds, uh)
+        from IPython import embed; embed(); exit(1)
+        
 
         if MPI.rank(MPI.comm_world) == 0:
             timestamp = file_u.attributes(data)["timestamp"]
