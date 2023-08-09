@@ -40,8 +40,10 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     """
     # File paths
     file_path_u = path.join(folder, "u.h5")
+    file_path_p = path.join(folder, "p.h5")
     mesh_path = path.join(folder, "mesh.h5")
     file_u = HDF5File(MPI.comm_world, file_path_u, "r")
+    file_p = HDF5File(MPI.comm_world, file_path_p, "r")
 
     # Determine what time step to start post-processing from
     start = int(T / dt / save_frequency * (start_cycle - 1))
@@ -50,7 +52,9 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     if MPI.rank(MPI.comm_world) == 0:
         print("Reading dataset names")
 
+    start = 0
     dataset = get_dataset_names(file_u, start=start, step=step)
+    dataset_p = get_dataset_names(file_p, start=start, step=step, vector_filename="/pressure/vector_%d")
 
     # Read mesh saved as HDF5 format
     mesh = Mesh()
@@ -65,11 +69,14 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     V_b1 = VectorFunctionSpace(bm, "CG", 1)
     U_b1 = FunctionSpace(bm, "CG", 1)
     V = VectorFunctionSpace(mesh, "CG", velocity_degree)
+    U = FunctionSpace(mesh, "CG", 1)
+    
 
     if MPI.rank(MPI.comm_world) == 0:
         print("Defining functions")
 
     u = Function(V)
+    p = Function(U)
 
     # RRT
     RRT = Function(U_b1)
@@ -96,8 +103,8 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
     TWSSG_avg = Function(U_b1)
     twssg = Function(V_b1)
     tau_prev = Function(V_b1)
-
-    stress = STRESS(u, 0.0, nu, mesh)
+    print("Compute Stress with pressure")
+    stress = STRESS(u, p, nu, mesh)
 
     # Get number of saved steps and cycles
     saved_time_steps_per_cycle = int(T / dt / save_frequency / step)
@@ -130,11 +137,12 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         print("=" * 10, "Start post processing", "=" * 10)
 
     counter = start
-    for data in dataset:
+    for (data, data_p) in zip(dataset, dataset_p):
         # Update file_counter
         counter += 1
 
         file_u.read(u, data)
+        file_p.read(p, data_p)
 
         if MPI.rank(MPI.comm_world) == 0:
             timestamp = file_u.attributes(data)["timestamp"]
