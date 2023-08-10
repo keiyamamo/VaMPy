@@ -108,7 +108,7 @@ def create_bcs(t, NS_expressions, V, Q, area_ratio, area_inlet, mesh, mesh_path,
     t_values, Q_ = np.loadtxt(path.join(path.dirname(path.abspath(__file__)), "ICA_values")).T
     Q_values = Q_mean * Q_  # Specific flow rate = Normalized flow wave form * Prescribed flow rate
     t_values *= 1000  # Scale time in normalised flow wave form to [ms]
-    tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundary)
+    _, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundary)
 
     # Create Womersley boundary condition at inlet
     inlet = make_womersley_bcs(t_values, Q_values, nu, tmp_center, tmp_radius, tmp_normal,
