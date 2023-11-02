@@ -65,13 +65,13 @@ def compute_velocity_and_pressure(case_path, dt, velocity_degree, pressure_degre
         # Read in velocity solution to vector function u and pressure to function p
         try:
             u_h5 = HDF5File(MPI.comm_world, file_path_u.__str__(), "r")
-            p_h5 = HDF5File(MPI.comm_world, file_path_p.__str__(), "r")
+            # p_h5 = HDF5File(MPI.comm_world, file_path_p.__str__(), "r")
             u_name = "/velocity/vector_%d" % file_counter
-            p_name = "/pressure/vector_%d" % file_counter
+            # p_name = "/pressure/vector_%d" % file_counter
             timestamp = u_h5.attributes(u_name)["timestamp"]
             print("=" * 10, "Timestep: {}".format(timestamp), "=" * 10)
             u_h5.read(u, u_name)
-            p_h5.read(p, p_name)
+            # p_h5.read(p, p_name)
         except Exception:
             print("=" * 10, "Finished reading solutions", "=" * 10)
             break
@@ -81,8 +81,8 @@ def compute_velocity_and_pressure(case_path, dt, velocity_degree, pressure_degre
         u_writer.write(u, dt * file_counter)
 
         # Store pressure
-        p.rename("pressure", "pressure")
-        p_writer.write(p, dt * file_counter)
+        # p.rename("pressure", "pressure")
+        # p_writer.write(p, dt * file_counter)
 
         # Update file_counter
         file_counter += step

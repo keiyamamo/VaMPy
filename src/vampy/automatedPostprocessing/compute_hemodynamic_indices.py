@@ -1,9 +1,10 @@
 from os import path
 
 from dolfin import Function, VectorFunctionSpace, FunctionSpace, parameters, MPI, HDF5File, Mesh, XDMFFile, \
-    BoundaryMesh, project, inner
+    BoundaryMesh, project, inner, File
 
-from vampy.automatedPostprocessing.postprocessing_common import STRESS, read_command_line, get_dataset_names
+from vampy.automatedPostprocessing.postprocessing_common import read_command_line, get_dataset_names
+from postprocessing_common import STRESS
 
 try:
     parameters["reorder_dofs_serial"] = False
@@ -58,12 +59,11 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         mesh_file.read(mesh, "mesh", False)
 
     bm = BoundaryMesh(mesh, 'exterior')
-
     if MPI.rank(MPI.comm_world) == 0:
         print("Defining function spaces")
 
-    V_b1 = VectorFunctionSpace(bm, "CG", 1)
-    U_b1 = FunctionSpace(bm, "CG", 1)
+    V_b1 = VectorFunctionSpace(bm, "DG", 0)
+    U_b1 = FunctionSpace(bm, "DG", 0)
     V = VectorFunctionSpace(mesh, "CG", velocity_degree)
 
     if MPI.rank(MPI.comm_world) == 0:
@@ -147,71 +147,72 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
         tau.vector()[:] = tau.vector()[:] * rho
         WSS_mean_avg.vector().axpy(1, tau.vector())
 
-        if MPI.rank(MPI.comm_world) == 0:
-            print("Compute WSS (absolute value)")
-        tawss = project(inner(tau, tau) ** (1 / 2), U_b1)
-        TAWSS_avg.vector().axpy(1, tawss.vector())
+        # if MPI.rank(MPI.comm_world) == 0:
+        #     print("Compute WSS (absolute value)")
+        # tawss = project(inner(tau, tau) ** (1 / 2), U_b1)
+        # TAWSS_avg.vector().axpy(1, tawss.vector())
 
-        # Compute TWSSG
-        if MPI.rank(MPI.comm_world) == 0:
-            print("Compute TWSSG")
-        twssg.vector().set_local((tau.vector().get_local() - tau_prev.vector().get_local()) / dt)
-        twssg.vector().apply("insert")
-        twssg_ = project(inner(twssg, twssg) ** (1 / 2), U_b1)
-        TWSSG_avg.vector().axpy(1, twssg_.vector())
+        # # Compute TWSSG
+        # if MPI.rank(MPI.comm_world) == 0:
+        #     print("Compute TWSSG")
+        # twssg.vector().set_local((tau.vector().get_local() - tau_prev.vector().get_local()) / dt)
+        # twssg.vector().apply("insert")
+        # twssg_ = project(inner(twssg, twssg) ** (1 / 2), U_b1)
+        # TWSSG_avg.vector().axpy(1, twssg_.vector())
 
-        # Update tau
-        if MPI.rank(MPI.comm_world) == 0:
-            print("Update WSS \n")
-        tau_prev.vector().zero()
-        tau_prev.vector().axpy(1, tau.vector())
+        # # Update tau
+        # if MPI.rank(MPI.comm_world) == 0:
+        #     print("Update WSS \n")
+        # tau_prev.vector().zero()
+        # tau_prev.vector().axpy(1, tau.vector())
 
         # Save instantaneous WSS
         tau.rename("WSS", "WSS")
-        indices["WSS"].write(tau, dt * counter)
+        # indices["WSS"].write(tau, dt * counter)
+        indices["WSS"].write_checkpoint(tau, "WSS", dt * counter, append=True)
 
         if len(cycles_to_average) != 0 and counter == counters_to_save[0]:
-            # Get cycle number
-            cycle = int(counters_to_save[0] / saved_time_steps_per_cycle)
-            if MPI.rank(MPI.comm_world) == 0:
-                print("=" * 10, "Storing cardiac cycle {}".format(cycle), "=" * 10)
+        #     # Get cycle number
+        #     cycle = int(counters_to_save[0] / saved_time_steps_per_cycle)
+        #     if MPI.rank(MPI.comm_world) == 0:
+        #         print("=" * 10, "Storing cardiac cycle {}".format(cycle), "=" * 10)
 
-            # Get average over sampled time steps
-            for index in [TWSSG_avg, TAWSS_avg, WSS_mean_avg]:
-                index.vector()[:] = index.vector()[:] / saved_time_steps_per_cycle
+        #     # Get average over sampled time steps
+        #     for index in [TWSSG_avg, TAWSS_avg, WSS_mean_avg]:
+        #         index.vector()[:] = index.vector()[:] / saved_time_steps_per_cycle
 
-            # Compute OSI, RRT and ECAP
-            wss_mean = project(inner(WSS_mean_avg, WSS_mean_avg) ** (1 / 2), U_b1)
-            wss_mean_vec = wss_mean.vector().get_local()
-            tawss_vec = TAWSS_avg.vector().get_local()
+        #     # Compute OSI, RRT and ECAP
+        #     wss_mean = project(inner(WSS_mean_avg, WSS_mean_avg) ** (1 / 2), U_b1)
+        #     wss_mean_vec = wss_mean.vector().get_local()
+        #     tawss_vec = TAWSS_avg.vector().get_local()
 
-            # Compute RRT, OSI, and ECAP based on mean and absolute WSS
-            RRT_avg.vector().set_local(1 / wss_mean_vec)
-            OSI_avg.vector().set_local(0.5 * (1 - wss_mean_vec / tawss_vec))
-            ECAP_avg.vector().set_local(OSI_avg.vector().get_local() / tawss_vec)
+        #     # Compute RRT, OSI, and ECAP based on mean and absolute WSS
+        #     RRT_avg.vector().set_local(1 / wss_mean_vec)
+        #     OSI_avg.vector().set_local(0.5 * (1 - wss_mean_vec / tawss_vec))
+        #     ECAP_avg.vector().set_local(OSI_avg.vector().get_local() / tawss_vec)
 
-            for index in [RRT_avg, OSI_avg, ECAP_avg]:
-                index.vector().apply("insert")
+        #     for index in [RRT_avg, OSI_avg, ECAP_avg]:
+        #         index.vector().apply("insert")
 
-            # Rename displayed variable names
-            for var, name in zip(index_variables_avg, index_names):
-                var.rename(name, name)
+        #     # Rename displayed variable names
+        #     for var, name in zip(index_variables_avg, index_names):
+        #         var.rename(name, name)
 
             # Store solution
-            for name, index in index_dict_cycle.items():
-                indices[name + "_cycle_{:02d}".format(cycle)].write(index)
+            # for name, index in index_dict_cycle.items():
+            #     indices[name + "_cycle_{:02d}".format(cycle)].write(index)
 
-            # Append solution to total solution
-            for index, index_avg in zip(index_dict.values(), index_dict_cycle.values()):
-                index_avg.vector().apply("insert")
-                index.vector().axpy(1, index_avg.vector())
+        #     # Append solution to total solution
+        #     for index, index_avg in zip(index_dict.values(), index_dict_cycle.values()):
+        #         index_avg.vector().apply("insert")
+        #         index.vector().axpy(1, index_avg.vector())
 
-            WSS_mean_avg.vector().apply("insert")
-            WSS_mean.vector().axpy(1, WSS_mean_avg.vector())
+        #     WSS_mean_avg.vector().apply("insert")
+        #     WSS_mean.vector().axpy(1, WSS_mean_avg.vector())
 
-            # Reset tmp solutions
-            for index_avg in index_dict_cycle.values():
-                index_avg.vector().zero()
+        #     # Reset tmp solutions
+        #     for index_avg in index_dict_cycle.values():
+        #         index_avg.vector().zero()
 
             WSS_mean_avg.vector().zero()
 

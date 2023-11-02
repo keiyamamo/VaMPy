@@ -2,7 +2,7 @@ import argparse
 from time import time
 
 from dolfin import parameters, MPI, assemble, interpolate, Measure, FacetNormal, Identity, VectorFunctionSpace, \
-    BoundaryMesh, Function, FacetArea, TestFunction, FunctionSpace, grad, inner, sqrt
+    BoundaryMesh, Function, FacetArea, TestFunction, FunctionSpace, grad, inner, sqrt, TrialFunction, solve
 
 try:
     parameters["allow_extrapolation"] = True
@@ -155,7 +155,7 @@ class STRESS:
         """
         boundary_ds = Measure("ds", domain=mesh)
         boundary_mesh = BoundaryMesh(mesh, 'exterior')
-        self.bmV = VectorFunctionSpace(boundary_mesh, 'CG', 1)
+        self.bmV = VectorFunctionSpace(boundary_mesh, 'DG', 0)
 
         # Compute stress tensor
         sigma = (2 * nu * epsilon(u)) - (p * Identity(len(u)))
