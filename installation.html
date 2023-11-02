@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -69,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="prev" title="VaMPy - The Vascular Modeling Pypeline" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Sep 27, 2023"/>
+    <meta name="docbuild:last-update" content="Nov 02, 2023"/>
   </head>
   
   
@@ -147,13 +147,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-light" alt="VaMPy - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="VaMPy - Home"/>`);</script>
   
   
 </a></div>
@@ -177,6 +178,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="preprocess.html">Pre-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movingpreprocess.html">Pre-processing for moving domains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation.html">Computational fluid dynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="postprocess.html">Post-processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quantities.html">Computed quantities</a></li>
@@ -188,6 +190,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="artery.html">High-resolution CFD simulation in the internal carotid artery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atrium.html">Hemodynamic simulation in the left atrium and left atrial appendage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movingatrium.html">Moving domain simulation of the left atrium</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="nav bd-sidenav">
@@ -403,8 +406,9 @@ document.write(`
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> is a pure Python package that combines the morphological processing tools of
 <a class="reference external" href="https://github.com/KVSlab/morphMan">morphMan</a> and <a class="reference external" href="http://www.vmtk.org/">vmtk</a>, the computational fluid dynamics
-solver <a class="reference external" href="https://github.com/mikaem/Oasis">Oasis</a>, and the finite element computing
-platform <a class="reference external" href="https://fenicsproject.org/">FEniCS</a> into a powerful and user-friendly computational fluid dynamics pipeline.</p>
+solver <a class="reference external" href="https://github.com/mikaem/Oasis">Oasis</a>/<a class="reference external" href="https://github.com/KVSlab/OasisMove">OasisMove</a>, and the finite element
+computing platform <a class="reference external" href="https://fenicsproject.org/">FEniCS</a> into a powerful and user-friendly computational fluid dynamics
+pipeline.</p>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
 <p>The dependencies of <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> are:</p>
@@ -413,16 +417,15 @@ platform <a class="reference external" href="https://fenicsproject.org/">FEniCS<
 <li><p>FEniCS &gt;= 2018.1</p></li>
 <li><p>morphMan &gt;= 1.2</p></li>
 <li><p>vmtk &gt;= 1.4.0</p></li>
-<li><p>Oasis &gt;= 2018.1</p></li>
+<li><p>Oasis &gt;= 2018.1 OR OasisMove &gt;= 0.2.0</p></li>
 <li><p>paramiko &gt;= 3.0</p></li>
 <li><p>cppimport &gt;= 22.8.2</p></li>
 </ul>
 </section>
 <section id="installing-with-conda">
 <h2>Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#installing-with-conda" title="Permalink to this heading">#</a></h2>
-<p>To install <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> and all its dependencies to a <em>local environment</em>, we recommend using <code class="docutils literal notranslate"><span class="pre">conda</span></code>.
-Instructions for installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code>
-with <code class="docutils literal notranslate"><span class="pre">conda</span></code> can be found <a class="reference internal" href="conda.html#install-conda"><span class="std std-ref">here</span></a>.</p>
+<p>To install <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> and all its dependencies to a <em>local environment</em>, we recommend using <code class="docutils literal notranslate"><span class="pre">conda</span></code>. Instructions for
+installing <code class="docutils literal notranslate"><span class="pre">VaMPy</span></code> with <code class="docutils literal notranslate"><span class="pre">conda</span></code> can be found <a class="reference internal" href="conda.html#install-conda"><span class="std std-ref">here</span></a>.</p>
 </section>
 <section id="installing-with-docker">
 <h2>Installing with Docker<a class="headerlink" href="#installing-with-docker" title="Permalink to this heading">#</a></h2>
@@ -529,7 +532,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 27, 2023.
+  Last updated on Nov 02, 2023.
   <br/>
 </p>
   </div>
@@ -547,8 +550,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

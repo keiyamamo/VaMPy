@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,9 +37,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Sep 27, 2023"/>
+    <meta name="docbuild:last-update" content="Nov 02, 2023"/>
   </head>
   
   
@@ -144,13 +144,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-light" alt="VaMPy - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="VaMPy - Home"/>`);</script>
   
   
 </a></div>
@@ -174,6 +175,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using VaMPy</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="preprocess.html">Pre-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movingpreprocess.html">Pre-processing for moving domains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation.html">Computational fluid dynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="postprocess.html">Post-processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quantities.html">Computed quantities</a></li>
@@ -185,6 +187,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="artery.html">High-resolution CFD simulation in the internal carotid artery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atrium.html">Hemodynamic simulation in the left atrium and left atrial appendage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movingatrium.html">Moving domain simulation of the left atrium</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="nav bd-sidenav">
@@ -388,21 +391,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.check_if_closed_surface">check_if_closed_surface() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.checkIfThereIsHoles">checkIfThereIsHoles() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.checkIfThereIsNonTriangleCells">checkIfThereIsNonTriangleCells() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
-</li>
       <li><a href="api.html#vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting.CheckTotalFlowRate">CheckTotalFlowRate() (vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting method)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.cleanTheSurface">cleanTheSurface() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.cleanTheSurfaceUnstructGrid">cleanTheSurfaceUnstructGrid() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
-</li>
       <li><a href="api.html#vampy.automatedPreprocessing.DisplayData.VtkPointCloud.clearPoints">clearPoints() (vampy.automatedPreprocessing.DisplayData.VtkPointCloud method)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.closeAllTheHolesOnTheSurface">closeAllTheHolesOnTheSurface() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
-</li>
-      <li><a href="api.html#vampy.simulation.Womersley.compute_area">compute_area() (in module vampy.simulation.Womersley)</a>
 </li>
       <li><a href="api.html#vampy.simulation.Womersley.compute_boundary_geometry_acrn">compute_boundary_geometry_acrn() (in module vampy.simulation.Womersley)</a>
 </li>
@@ -416,16 +407,14 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.automatedPostprocessing.compute_hemodynamic_indices.compute_hemodynamic_indices">compute_hemodynamic_indices() (in module vampy.automatedPostprocessing.compute_hemodynamic_indices)</a>
 </li>
-      <li><a href="api.html#vampy.simulation.Womersley.compute_radius">compute_radius() (in module vampy.simulation.Womersley)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.compute_u_avg">compute_u_avg() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
 </li>
       <li><a href="api.html#vampy.automatedPostprocessing.compute_velocity_and_pressure.compute_velocity_and_pressure">compute_velocity_and_pressure() (in module vampy.automatedPostprocessing.compute_velocity_and_pressure)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting.ComputeAlphas">ComputeAlphas() (vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting.ComputeBetas">ComputeBetas() (vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting method)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.ComputeBranchLength">ComputeBranchLength() (in module vampy.automatedPreprocessing.ImportData)</a>
@@ -445,8 +434,6 @@ document.write(`
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.ComputeInletAverageCrossSectionArea">ComputeInletAverageCrossSectionArea() (in module vampy.automatedPreprocessing.ImportData)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.ComputeInletAverageRadius">ComputeInletAverageRadius() (in module vampy.automatedPreprocessing.ImportData)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.computeQualityMesh">computeQualityMesh() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
 </li>
       <li><a href="api.html#vampy.simulation.Artery.create_bcs">create_bcs() (in module vampy.simulation.Artery)</a>
 
@@ -474,7 +461,7 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.dist_sphere_diam">dist_sphere_diam() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.DumpQualityStats">DumpQualityStats() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
+      <li><a href="api.html#vampy.simulation.simulation_common.dump_probes">dump_probes() (in module vampy.simulation.simulation_common)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -482,14 +469,16 @@ document.write(`
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.automatedPreprocessing.moving_common.easing_cos">easing_cos() (in module vampy.automatedPreprocessing.moving_common)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element">Element (class in vampy.automatedPreprocessing.ImportData)</a>
 </li>
       <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.epsilon">epsilon() (in module vampy.automatedPostprocessing.postprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.simulation.Womersley.WomersleyComponent.eval">eval() (vampy.simulation.Womersley.WomersleyComponent method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.simulation.Womersley.WomersleyComponent.eval">eval() (vampy.simulation.Womersley.WomersleyComponent method)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.vmtk_pointselector.vmtkPickPointSeedSelector.Execute">Execute() (vampy.automatedPreprocessing.vmtk_pointselector.vmtkPickPointSeedSelector method)</a>
 
       <ul>
@@ -506,11 +495,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.find_boundaries">find_boundaries() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting">FlowSplitting (class in vampy.automatedPreprocessing.NetworkBoundaryConditions)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.foundAndDeleteNaNTriangles">foundAndDeleteNaNTriangles() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
+      <li><a href="api.html#vampy.automatedPreprocessing.NetworkBoundaryConditions.FlowSplitting">FlowSplitting (class in vampy.automatedPreprocessing.NetworkBoundaryConditions)</a>
 </li>
       <li><a href="api.html#vampy.simulation.Womersley.fourier_coefficients">fourier_coefficients() (in module vampy.simulation.Womersley)</a>
 </li>
@@ -533,6 +520,8 @@ document.write(`
       <li><a href="api.html#vampy.automatedPostprocessing.compute_flow_and_simulation_metrics.get_files_for_phase_averaging">get_files_for_phase_averaging() (in module vampy.automatedPostprocessing.compute_flow_and_simulation_metrics)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.get_furtest_surface_point">get_furtest_surface_point() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
+</li>
+      <li><a href="api.html#vampy.automatedPreprocessing.moving_common.get_point_map">get_point_map() (in module vampy.automatedPreprocessing.moving_common)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.get_regions_to_refine">get_regions_to_refine() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
@@ -606,15 +595,13 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.IsAnInlet">IsAnInlet() (vampy.automatedPreprocessing.ImportData.Element method)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.IsAnOutlet">IsAnOutlet() (vampy.automatedPreprocessing.ImportData.Element method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.IsAnOutlet">IsAnOutlet() (vampy.automatedPreprocessing.ImportData.Element method)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.IsArrayDefined">IsArrayDefined() (in module vampy.automatedPreprocessing.ImportData)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.ImportData.Element.IsBlanked">IsBlanked() (vampy.automatedPreprocessing.ImportData.Element method)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.isNaN">isNaN() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -672,13 +659,13 @@ document.write(`
 </li>
         <li><a href="api.html#module-vampy.automatedPreprocessing.ImportData">vampy.automatedPreprocessing.ImportData</a>
 </li>
+        <li><a href="api.html#module-vampy.automatedPreprocessing.moving_common">vampy.automatedPreprocessing.moving_common</a>
+</li>
         <li><a href="api.html#module-vampy.automatedPreprocessing.NetworkBoundaryConditions">vampy.automatedPreprocessing.NetworkBoundaryConditions</a>
 </li>
         <li><a href="api.html#module-vampy.automatedPreprocessing.preprocessing_common">vampy.automatedPreprocessing.preprocessing_common</a>
 </li>
         <li><a href="api.html#module-vampy.automatedPreprocessing.simulate">vampy.automatedPreprocessing.simulate</a>
-</li>
-        <li><a href="api.html#module-vampy.automatedPreprocessing.ToolRepairSTL">vampy.automatedPreprocessing.ToolRepairSTL</a>
 </li>
         <li><a href="api.html#module-vampy.automatedPreprocessing.visualize">vampy.automatedPreprocessing.visualize</a>
 </li>
@@ -693,6 +680,10 @@ document.write(`
         <li><a href="api.html#module-vampy.simulation.Womersley">vampy.simulation.Womersley</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.automatedPreprocessing.moving_common.move_surface_model">move_surface_model() (in module vampy.automatedPreprocessing.moving_common)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -731,6 +722,8 @@ document.write(`
         <li><a href="api.html#vampy.simulation.Atrium.problem_parameters">(in module vampy.simulation.Atrium)</a>
 </li>
       </ul></li>
+      <li><a href="api.html#vampy.automatedPreprocessing.moving_common.project_displacement">project_displacement() (in module vampy.automatedPreprocessing.moving_common)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.provide_region_points">provide_region_points() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
   </ul></td>
@@ -751,9 +744,9 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#vampy.automatedPreprocessing.DisplayData.DisplayModel.renderWindow">renderWindow() (vampy.automatedPreprocessing.DisplayData.DisplayModel method)</a>
+      <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.remesh_surface">remesh_surface() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.repairSTL">repairSTL() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
+      <li><a href="api.html#vampy.automatedPreprocessing.DisplayData.DisplayModel.renderWindow">renderWindow() (vampy.automatedPreprocessing.DisplayData.DisplayModel method)</a>
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.automated_preprocessing.run_pre_processing">run_pre_processing() (in module vampy.automatedPreprocessing.automated_preprocessing)</a>
 </li>
@@ -765,6 +758,8 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#vampy.automatedPreprocessing.moving_common.save_displacement">save_displacement() (in module vampy.automatedPreprocessing.moving_common)</a>
+</li>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.scale_surface">scale_surface() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
 </li>
       <li><a href="api.html#vampy.simulation.Womersley.WomersleyComponent.set_t">set_t() (vampy.simulation.Womersley.WomersleyComponent method)</a>
@@ -817,9 +812,9 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.simulation.simulation_common.store_u_mean">store_u_mean() (in module vampy.simulation.simulation_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.STRESS">STRESS (class in vampy.automatedPostprocessing.postprocessing_common)</a>
+      <li><a href="api.html#vampy.simulation.simulation_common.store_velocity_and_pressure_h5">store_velocity_and_pressure_h5() (in module vampy.simulation.simulation_common)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.surfaceOverview">surfaceOverview() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
+      <li><a href="api.html#vampy.automatedPostprocessing.postprocessing_common.STRESS">STRESS (class in vampy.automatedPostprocessing.postprocessing_common)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -916,6 +911,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    vampy.automatedPreprocessing.moving_common
+
+      <ul>
+        <li><a href="api.html#module-vampy.automatedPreprocessing.moving_common">module</a>
+</li>
+      </ul></li>
+      <li>
     vampy.automatedPreprocessing.NetworkBoundaryConditions
 
       <ul>
@@ -929,20 +931,13 @@ document.write(`
         <li><a href="api.html#module-vampy.automatedPreprocessing.preprocessing_common">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     vampy.automatedPreprocessing.simulate
 
       <ul>
         <li><a href="api.html#module-vampy.automatedPreprocessing.simulate">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    vampy.automatedPreprocessing.ToolRepairSTL
-
-      <ul>
-        <li><a href="api.html#module-vampy.automatedPreprocessing.ToolRepairSTL">module</a>
 </li>
       </ul></li>
       <li>
@@ -997,12 +992,8 @@ document.write(`
 </li>
       <li><a href="api.html#vampy.automatedPreprocessing.DisplayData.VtkPointCloud">VtkPointCloud (class in vampy.automatedPreprocessing.DisplayData)</a>
 </li>
-      <li><a href="api.html#vampy.automatedPreprocessing.DisplayData.VtkText">VtkText (class in vampy.automatedPreprocessing.DisplayData)</a>
-
-      <ul>
-        <li><a href="api.html#vampy.automatedPreprocessing.vmtk_pointselector.VtkText">(class in vampy.automatedPreprocessing.vmtk_pointselector)</a>
+      <li><a href="api.html#vampy.automatedPreprocessing.vmtk_pointselector.VtkText">VtkText (class in vampy.automatedPreprocessing.vmtk_pointselector)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1014,8 +1005,6 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#vampy.automatedPreprocessing.preprocessing_common.write_mesh">write_mesh() (in module vampy.automatedPreprocessing.preprocessing_common)</a>
-</li>
-      <li><a href="api.html#vampy.automatedPreprocessing.ToolRepairSTL.writeSTLfile">writeSTLfile() (in module vampy.automatedPreprocessing.ToolRepairSTL)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1074,7 +1063,7 @@ By Henrik A. Kjeldsberg
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Sep 27, 2023.
+  Last updated on Nov 02, 2023.
   <br/>
 </p>
   </div>
@@ -1092,8 +1081,8 @@ By Henrik A. Kjeldsberg
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
