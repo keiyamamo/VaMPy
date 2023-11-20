@@ -81,6 +81,31 @@ def read_command_line():
                         default=False,
                         action='store_true',
                         help="Computes average over all cycles if True.")
+    
+    parser.add_argument('-ca', '--compute-all',
+                        default=True,
+                        action='store_true',
+                        help="Computes all post-processing if True.")
+    
+    parser.add_argument('-ck', '--compute-kolmogorov',
+                        default=False,
+                        action='store_true',
+                        help="Computes kolmogorov scales if True.")
+    
+    parser.add_argument('-csd', '--compute-strain-dissipation',
+                        default=False,
+                        action='store_true',
+                        help="Computes strain and dissipation if True.")
+
+    parser.add_argument('-ce', '--compute-energy',
+                        default=False,
+                        action='store_true',
+                        help="Computes energy (kinetic & turbulent kinetic) if True.")
+
+    parser.add_argument('-cc', '--compute-cfl',
+                        default=False,
+                        action='store_true',
+                        help="Computes CFL number if True.")
 
     args = parser.parse_args()
 

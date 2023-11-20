@@ -206,7 +206,8 @@ def get_files_for_phase_averaging(times_to_average, dt, save_frequency, step, nu
 
 def define_functions_and_iterate_dataset(time_to_average, dataset, dataset_avg, dt, file_u, file_path_u_avg,
                                          file_path_u, mesh, nu, number_of_files, DG, V, Vv, cycles_to_average,
-                                         saved_time_steps_per_cycle):
+                                         saved_time_steps_per_cycle, compute_all, compute_plus, compute_kolmogorov,
+                                         comptue_strain_dissipation, compute_energy, compute_cfl):
     """
     Defines functions and vector functions for all metrics to be computed, iterates through dataset and computes
     several flow and simulation metrics.
@@ -229,6 +230,12 @@ def define_functions_and_iterate_dataset(time_to_average, dataset, dataset_avg, 
         nu (float): Viscosity
         dt (float): Time step in [ms]
         cycles_to_average (list): List of which cycles to average
+        compute_all (bool): Flag for computing all metrics
+        compute_plus (bool): Flag for computing plus values
+        compute_kolmogorov (bool): Flag for computing Kolmogorov scales
+        comptue_strain_dissipation (bool): Flag for computing strain and dissipation
+        compute_energy (bool): Flag for computing energy
+        compute_cfl (bool): Flag for computing CFL number
     """
     # Functions for storing values
     v = TestFunction(DG)
@@ -239,59 +246,64 @@ def define_functions_and_iterate_dataset(time_to_average, dataset, dataset_avg, 
     u_prime = Function(V)
 
     # Plus-values
-    l_plus_avg = Function(DG)
-    l_plus_cycle_avg = Function(DG)
-    l_plus = Function(DG)
-    t_plus_avg = Function(DG)
-    t_plus_cycle_avg = Function(DG)
-    t_plus = Function(DG)
+    if compute_all or compute_plus:
+        l_plus_avg = Function(DG)
+        l_plus_cycle_avg = Function(DG)
+        l_plus = Function(DG)
+        t_plus_avg = Function(DG)
+        t_plus_cycle_avg = Function(DG)
+        t_plus = Function(DG)
 
     # Kolmogorov scales
-    length_scale = Function(DG)
-    length_scale_avg = Function(DG)
-    length_scale_cycle_avg = Function(DG)
-    time_scale = Function(DG)
-    time_scale_avg = Function(DG)
-    time_scale_cycle_avg = Function(DG)
-    velocity_scale = Function(DG)
-    velocity_scale_avg = Function(DG)
-    velocity_scale_cycle_avg = Function(DG)
+    if compute_all or compute_kolmogorov:
+        length_scale = Function(DG)
+        length_scale_avg = Function(DG)
+        length_scale_cycle_avg = Function(DG)
+        time_scale = Function(DG)
+        time_scale_avg = Function(DG)
+        time_scale_cycle_avg = Function(DG)
+        velocity_scale = Function(DG)
+        velocity_scale_avg = Function(DG)
+        velocity_scale_cycle_avg = Function(DG)
 
     # Inner grad(u), grad(u)
-    turbulent_dissipation = Function(DG)
-    turbulent_dissipation_avg = Function(DG)
-    turbulent_dissipation_cycle_avg = Function(DG)
-    strain = Function(DG)
-    strain_avg = Function(DG)
-    strain_cycle_avg = Function(DG)
-    dissipation = Function(DG)
-    dissipation_avg = Function(DG)
-    dissipation_cycle_avg = Function(DG)
+    if compute_all or comptue_strain_dissipation:
+        turbulent_dissipation = Function(DG)
+        turbulent_dissipation_avg = Function(DG)
+        turbulent_dissipation_cycle_avg = Function(DG)
+        strain = Function(DG)
+        strain_avg = Function(DG)
+        strain_cycle_avg = Function(DG)
+        dissipation = Function(DG)
+        dissipation_avg = Function(DG)
+        dissipation_cycle_avg = Function(DG)
 
     # Energy
-    kinetic_energy = Function(Vv)
-    kinetic_energy_avg = Function(Vv)
-    kinetic_energy_cycle_avg = Function(Vv)
-    turbulent_kinetic_energy = Function(Vv)
-    turbulent_kinetic_energy_avg = Function(Vv)
-    turbulent_kinetic_energy_cycle_avg = Function(Vv)
+    if compute_all or compute_energy:
+        kinetic_energy = Function(Vv)
+        kinetic_energy_avg = Function(Vv)
+        kinetic_energy_cycle_avg = Function(Vv)
+        turbulent_kinetic_energy = Function(Vv)
+        turbulent_kinetic_energy_avg = Function(Vv)
+        turbulent_kinetic_energy_cycle_avg = Function(Vv)
 
-    # Velocity
-    u0 = Function(Vv)
-    u1 = Function(Vv)
-    u2 = Function(Vv)
-    u0_prime = Function(Vv)
-    u1_prime = Function(Vv)
-    u2_prime = Function(Vv)
+        # Velocity
+        u0 = Function(Vv)
+        u1 = Function(Vv)
+        u2 = Function(Vv)
+        u0_prime = Function(Vv)
+        u1_prime = Function(Vv)
+        u2_prime = Function(Vv)
 
     # CFL
-    CFL = Function(DG)
-    CFL_avg = Function(DG)
-    CFL_cycle_avg = Function(DG)
+    if compute_all or compute_cfl:
+        CFL = Function(DG)
+        CFL_avg = Function(DG)
+        CFL_cycle_avg = Function(DG)
 
-    # Characteristic edge length
-    h = CellDiameter(mesh)
-    characteristic_edge_length = project(h, DG)
+        # Characteristic edge length
+        h = CellDiameter(mesh)
+        characteristic_edge_length = project(h, DG)
 
     # Create XDMF files for saving metrics
     if cycles_to_average is None:
