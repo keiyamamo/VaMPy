@@ -2,6 +2,7 @@ import json
 import os
 import pickle
 from pprint import pprint
+import numpy as np
 from dolfin import set_log_level
 
 if os.environ.get('OASIS_MODE') == 'TESTING':
@@ -134,9 +135,11 @@ def create_bcs(t, NS_expressions, V, Q, area_ratio, area_inlet, mesh, mesh_path,
         print("=== Initial pressure and area fraction ===")
 
     for i, ID in enumerate(id_out):
-        p_initial = area_out[i] / sum(area_out)
+        # p_initial = area_out[i] / sum(area_out)
+        p_initial = 0.0
         outflow = Expression("p", p=p_initial, degree=pressure_degree)
-        bc = DirichletBC(Q, outflow, boundary, ID)
+        # bc = DirichletBC(Q, outflow, boundary, ID)
+        bc = DirichletBC(Q, Constant(0), boundary, ID)
         bc_p.append(bc)
         NS_expressions[ID] = outflow
         if MPI.rank(MPI.comm_world) == 0:
@@ -216,6 +219,7 @@ def temporal_hook(u_, p_, mesh, tstep, dump_probe_frequency, eval_dict, newfolde
     if tstep > 2:
         Q_ideals, Q_in, Q_outs = update_pressure_condition(NS_expressions, area_ratio, boundary, id_in, id_out, mesh, n,
                                                            tstep, u_)
+        Q_outs = [0] * len(Q_outs) # apply zero pressure condition
 
     # Compute flow rates and updated pressure at outlets, and mean velocity and Reynolds number at inlet
     if MPI.rank(MPI.comm_world) == 0 and tstep % 10 == 0:
