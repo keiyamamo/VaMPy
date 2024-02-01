@@ -43,10 +43,11 @@ def problem_parameters(commandline_kwargs, NS_parameters, NS_expressions, **NS_n
         # Parameters are in mm and ms
         cardiac_cycle = float(commandline_kwargs.get("cardiac_cycle", 951))
         number_of_cycles = float(commandline_kwargs.get("number_of_cycles", 2))
+        Q_mean = float(commandline_kwargs.get("Q_mean", 1.61))
 
         NS_parameters.update(
             # Fluid parameters
-            nu=3.3018e-3,  # Kinematic viscosity: 0.0035 Pa-s / 1060 kg/m^3 = 3.3018E-6 m^2/s = 3.3018-3 mm^2/ms
+            nu=3.5e-3,  # Kinematic viscosity: 0.0035 Pa-s / 1000 kg/m^3 = 3.5E-6 m^2/s = 3.5e-3 mm^2/ms
             # Geometry parameters
             id_in=[],  # Inlet boundary ID
             id_out=[],  # Outlet boundary IDs
@@ -59,13 +60,16 @@ def problem_parameters(commandline_kwargs, NS_parameters, NS_expressions, **NS_n
             dump_probe_frequency=100,  # Dump frequency for sampling velocity & pressure at probes along the centerline
             save_solution_frequency=5,  # Save frequency for velocity and pressure field
             save_solution_after_cycle=1,  # Store solution after 1 cardiac cycle
+            Q_mean=Q_mean,  # Mean flow rate at inlet [mL/s]
             # Oasis specific parameters
             checkpoint=500,  # Checkpoint frequency
             print_intermediate_info=100,  # Frequency for printing solver statistics
             folder="results_artery",  # Preferred results folder name
             mesh_path=commandline_kwargs["mesh_path"],  # Path to the mesh
+            # File path
+            FC_file=commandline_kwargs["FC_file"],  # Path to the file containing the Fourier coefficients
             # Solver parameters
-            velocity_degree=1,  # Polynomial order of finite element for velocity. Normally linear (1) or quadratic (2)
+            velocity_degree=2,  # Polynomial order of finite element for velocity. Normally linear (1) or quadratic (2)
             pressure_degree=1,  # Polynomial order of finite element for pressure. Normally linear (1)
             use_krylov_solvers=True,
             krylov_solvers=dict(monitor_convergence=False)
@@ -89,8 +93,8 @@ def mesh(mesh_path, **NS_namespace):
     return mesh
 
 
-def create_bcs(t, NS_expressions, V, Q, area_ratio, area_inlet, mesh, mesh_path, nu, id_in, id_out, pressure_degree,
-               **NS_namespace):
+def create_bcs(t, NS_expressions, V, Q, area_ratio, area_inlet, mesh, mesh_path, nu, id_in, id_out, pressure_degree, cardiac_cycle, FC_file,    
+               Q_mean, **NS_namespace):
     # Mesh function
     boundary = MeshFunction("size_t", mesh, mesh.geometry().dim() - 1, mesh.domains())
 
@@ -103,22 +107,20 @@ def create_bcs(t, NS_expressions, V, Q, area_ratio, area_inlet, mesh, mesh_path,
     id_out[:] = info['outlet_ids']
     id_wall = min(id_in + id_out) - 1
 
-    Q_mean = info['mean_flow_rate']
-
     area_ratio[:] = info['area_ratio']
     area_inlet.append(info['inlet_area'])
 
     # Load normalized time and flow rate values
-    t_values, Q_ = np.loadtxt(path.join(path.dirname(path.abspath(__file__)), "ICA_values")).T
-    Q_values = Q_mean * Q_  # Specific flow rate = Normalized flow wave form * Prescribed flow rate
-    t_values *= 1000  # Scale time in normalised flow wave form to [ms]
     _, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundary)
 
-    # Create Womersley boundary condition at inlet
-    inlet = make_womersley_bcs(t_values, Q_values, nu, tmp_center, tmp_radius, tmp_normal,
-                               V.ufl_element())
-    NS_expressions["inlet"] = inlet
+    # Load fourier coefficients for the velocity and scale by flow rate
+    An, Bn = np.loadtxt(os.path.join(os.path.dirname(os.path.abspath(__file__)), FC_file)).T
+    # Convert to complex fourier coefficients
+    Cn = (An - Bn * 1j) * Q_mean
 
+    # Create Womersley boundary condition at inlet
+    inlet = make_womersley_bcs(cardiac_cycle, None, nu, tmp_center, tmp_radius, tmp_normal,  V.ufl_element(), Cn=Cn)
+    NS_expressions["inlet"] = inlet 
     # Initialize inlet expressions with initial time
     for uc in inlet:
         uc.set_t(t)
@@ -219,7 +221,6 @@ def temporal_hook(u_, p_, mesh, tstep, dump_probe_frequency, eval_dict, newfolde
     if tstep > 2:
         Q_ideals, Q_in, Q_outs = update_pressure_condition(NS_expressions, area_ratio, boundary, id_in, id_out, mesh, n,
                                                            tstep, u_)
-        Q_outs = [0] * len(Q_outs) # apply zero pressure condition
 
     # Compute flow rates and updated pressure at outlets, and mean velocity and Reynolds number at inlet
     if MPI.rank(MPI.comm_world) == 0 and tstep % 10 == 0:
