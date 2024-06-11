@@ -94,6 +94,7 @@ class VelInPara(UserExpression):
         self.dt = dt
         self.t_ramp = vel_t_ramp
         self.interp_velocity = interp_velocity
+        self.vel = 0.0
         self.number = int(self.t / self.dt)
         self.n = n  # normal direction
         self.dsi = dsi  # surface integral element
@@ -109,24 +110,21 @@ class VelInPara(UserExpression):
 
     def update(self, t):
         self.t = t
-        if self.number + 1 < len(self.interp_velocity):
-            self.number = int(self.t / self.dt)
+        # if self.number + 1 < len(self.interp_velocity):
+        self.number = int(self.t / self.dt)
+        self.vel = self.interp_velocity[self.number]
+        if MPI.rank(MPI.comm_world) == 0:
+            print(f"Velocity = {self.vel} m/s at t = {self.t} s")
+
 
     def eval(self, value, x):
         # Define the parabola
         r2 = (x[0] - self.c[0]) ** 2 + (x[1] - self.c[1]) ** 2 + (x[2] - self.c[2]) ** 2  # radius**2
         fact_r = 1 - (r2 / self.r ** 2)
 
-        # Define the velocity ramp with sigmoid
-        if (self.t < self.t_ramp) and (self.t_ramp > 0.0):
-            fact = self.interp_velocity[self.number] * (-0.5 * np.cos((np.pi / (self.t_ramp)) * (self.t)) + 0.5)
-            value[0] = -self.n[0] * fact_r * fact
-            value[1] = -self.n[1] * fact_r * fact
-            value[2] = -self.n[2] * fact_r * fact
-        else:
-            value[0] = -self.n[0] * (self.interp_velocity[self.number]) * fact_r
-            value[1] = -self.n[1] * (self.interp_velocity[self.number]) * fact_r
-            value[2] = -self.n[2] * (self.interp_velocity[self.number]) * fact_r
+        value[0] = -self.n[0] * (self.vel) * fact_r
+        value[1] = -self.n[1] * (self.vel) * fact_r
+        value[2] = -self.n[2] * (self.vel) * fact_r
 
     def value_shape(self):
         return (3,)
@@ -327,6 +325,8 @@ def temporal_hook(mesh, dt, t, save_solution_frequency, u_, NS_expressions, id_i
     # Update inlet condition
     for ID in id_in:
         NS_expressions["inlet_{}".format(ID)].update(t)
+        if MPI.rank(MPI.comm_world) == 0:
+            print("Inlet velocity updated at t = {} s".format(t))
 
       # Assign velocity components to vector solution
     if tstep % dump_probe_frequency == 0:
