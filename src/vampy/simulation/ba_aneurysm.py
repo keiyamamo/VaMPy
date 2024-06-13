@@ -9,6 +9,7 @@ from oasis.problems.NSfracStep import *
 
 from vampy.simulation.simulation_common import store_u_mean, get_file_paths, print_mesh_information, \
     store_velocity_and_pressure_h5
+from vampy.simulation.Womersley import make_womersley_bcs, compute_boundary_geometry_acrn
 
 from vasp.simulations.simulation_common import calculate_and_print_flow_properties, print_probe_points
 
@@ -40,14 +41,14 @@ def problem_parameters(commandline_kwargs, NS_parameters, scalar_components, Sch
         # Override some problem specific parameters
         # Parameters are in mm and ms
         cardiac_cycle = float(commandline_kwargs.get("cardiac_cycle", 951))
-        number_of_cycles = float(commandline_kwargs.get("number_of_cycles", 2))
+        number_of_cycles = float(commandline_kwargs.get("number_of_cycles", 3))
 
         NS_parameters.update(
             # Fluid parameters
             nu=3.3018868e-3,  # Viscosity [nu: 0.0035 Pa-s / 1060 kg/m^3 = 3.3018868E-6 m^2/s == 3.3018868E-3 mm^2/ms]
             # Geometry parameters
-            id_in=[6, 1],  # Inlet boundary IDs
-            id_out=[2, 3, 4, 5],  # Outlet boundary IDs
+            id_in=[2, 3],  # Inlet boundary IDs
+            id_out=[1],  # Outlet boundary IDs
             vel_t_ramp=0.0,  # Time for velocity ramp [ms]
             # Simulation parameters
             cardiac_cycle=cardiac_cycle,  # Run simulation for 1 cardiac cycles [ms]
@@ -87,50 +88,62 @@ def mesh(mesh_path, **NS_namespace):
     return atrium_mesh
 
 
-# Define velocity inlet parabolic profile
-class VelInPara(UserExpression):
-    def __init__(self, t, dt, vel_t_ramp, n, dsi, mesh, interp_velocity, **kwargs):
-        self.t = t
-        self.dt = dt
-        self.t_ramp = vel_t_ramp
-        self.interp_velocity = interp_velocity
-        self.vel = 0.0
-        self.number = int(self.t / self.dt)
-        self.n = n  # normal direction
-        self.dsi = dsi  # surface integral element
-        self.d = mesh.geometry().dim()
-        self.x = SpatialCoordinate(mesh)
-        # Compute area of boundary tesselation by integrating 1.0 over all facets
-        self.A = assemble(Constant(1.0, name="one") * self.dsi)
-        # Compute barycenter by integrating x components over all facets
-        self.c = [assemble(self.x[i] * self.dsi) / self.A for i in range(self.d)]
-        # Compute radius by taking max radius of boundary points
-        self.r = np.sqrt(self.A / np.pi)
-        super().__init__(**kwargs)
+# # Define velocity inlet parabolic profile
+# class VelInPara(UserExpression):
+#     def __init__(self, t, dt, vel_t_ramp, n, dsi, mesh, interp_velocity, **kwargs):
+#         self.t = t
+#         self.dt = dt
+#         self.t_ramp = vel_t_ramp
+#         self.interp_velocity = interp_velocity
+#         self.number = int(self.t / self.dt)
+#         self.n = n  # normal direction
+#         self.dsi = dsi  # surface integral element
+#         self.d = mesh.geometry().dim()
+#         self.x = SpatialCoordinate(mesh)
+#         # Compute area of boundary tesselation by integrating 1.0 over all facets
+#         self.A = assemble(Constant(1.0, name="one") * self.dsi)
+#         # Compute barycenter by integrating x components over all facets
+#         self.c = [assemble(self.x[i] * self.dsi) / self.A for i in range(self.d)]
+#         # Compute radius by taking max radius of boundary points
+#         self.r = np.sqrt(self.A / np.pi)
+#         super().__init__(**kwargs)
 
-    def update(self, t):
-        self.t = t
-        # if self.number + 1 < len(self.interp_velocity):
-        self.number = int(self.t / self.dt)
-        self.vel = self.interp_velocity[self.number]
-        if MPI.rank(MPI.comm_world) == 0:
-            print(f"Velocity = {self.vel} m/s at t = {self.t} s")
+#     def update(self, t):
+#         self.t = t
+#         # if self.number + 1 < len(self.interp_velocity):
+#         self.number = int(self.t / self.dt)
+#         if MPI.rank(MPI.comm_world) == 0:
+#             print("Number: ", self.number)
+#             print("Velocity: ", self.interp_velocity[self.number])
+#             print("Time: ", self.t)
+#             print("n[0]: ", self.n[0])
+#             print("n[1]: ", self.n[1])
+#             print("n[2]: ", self.n[2])
+
+#     def eval(self, value, x):
+#         # Define the parabola
+#         rv = x - self.c
+#         rvn = rv.dot(self.n)
+#         rp = rv - rvn * self.n
+#         r2_new = rp.dot(rp)
+#         y = np.sqrt(r2_new) / self.r
+#         fact_r = 1 - y ** 2
+
+#         # r2 = (x[0] - self.c[0]) ** 2 + (x[1] - self.c[1]) ** 2 + (x[2] - self.c[2]) ** 2  # radius**2
+#         # fact_r = 1 - (r2 / self.r ** 2)
+
+#         value[0] = -self.n[0] * (self.interp_velocity[self.number]) * fact_r
+#         value[1] = -self.n[1] * (self.interp_velocity[self.number]) * fact_r
+#         value[2] = -self.n[2] * (self.interp_velocity[self.number]) * fact_r
+#         if fact_r > 0.9 and fact_r < 1.0:
+#             if MPI.rank(MPI.comm_world) == 0:
+#                 print("Value: ", value)
+
+#     def value_shape(self):
+#         return (3,)
 
 
-    def eval(self, value, x):
-        # Define the parabola
-        r2 = (x[0] - self.c[0]) ** 2 + (x[1] - self.c[1]) ** 2 + (x[2] - self.c[2]) ** 2  # radius**2
-        fact_r = 1 - (r2 / self.r ** 2)
-
-        value[0] = -self.n[0] * (self.vel) * fact_r
-        value[1] = -self.n[1] * (self.vel) * fact_r
-        value[2] = -self.n[2] * (self.vel) * fact_r
-
-    def value_shape(self):
-        return (3,)
-
-
-def create_bcs(NS_expressions, mesh, T, dt, t, V, Q, id_in, id_out, vel_t_ramp, **NS_namespace):
+def create_bcs(NS_expressions, mesh, T, dt, nu, V, Q, id_in, id_out, vel_t_ramp, t, **NS_namespace):
     # Variables needed during the simulation
     boundaries = MeshFunction("size_t", mesh, mesh.geometry().dim() - 1, mesh.domains())
     ds = Measure("ds", domain=mesh, subdomain_data=boundaries)
@@ -236,19 +249,27 @@ def create_bcs(NS_expressions, mesh, T, dt, t, V, Q, id_in, id_out, vel_t_ramp, 
     t_v = np.arange(len(lva_velocity))
     num_t = int(T / dt)  # 30.000 timesteps = 3s (T) / 0.0001s (dt)
     tnew = np.linspace(0, len_v, num=num_t)
-
     interp_lva = np.array(np.interp(tnew, t_v, lva_velocity))
+    t_values = tnew[:10000]
+    lva = interp_lva[:10000]
+
+    # Inflow at lva
+    tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundaries)
+    flow_rate = lva * tmp_area
+    inlet_lva = make_womersley_bcs(t_values, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
+    NS_expressions[f"inlet_{id_in[0]}"] = inlet_lva
+
+    # Inflow at rva
+    tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[1], boundaries)
     interp_rva = np.array(np.interp(tnew, t_v, rva_velocity))
+    flow_rate = interp_rva[:10000] * tmp_area
+    inlet_rva = make_womersley_bcs(t_values, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
+    NS_expressions[f"inlet_{id_in[1]}"] = inlet_rva
 
-    # Create Parabolic profile for Proximal Artey (PA) and Distal Artey (DA)
-    u_inflow_exp1 = VelInPara(t=0.0, dt=dt, vel_t_ramp=vel_t_ramp, n=normal1, dsi=dsi1, mesh=mesh,
-                              interp_velocity=interp_lva, degree=2)
-    u_inflow_exp2 = VelInPara(t=0.0, dt=dt, vel_t_ramp=vel_t_ramp, n=normal2, dsi=dsi2, mesh=mesh,
-                              interp_velocity=interp_rva, degree=2)
-                    
-
-    NS_expressions[f"inlet_{id_in[0]}"] = u_inflow_exp1
-    NS_expressions[f"inlet_{id_in[1]}"] = u_inflow_exp2
+    # Initial condition
+    for ID in id_in:
+        for i in [0, 1, 2]:
+            NS_expressions[f"inlet_{ID}"][i].set_t(t)
 
     # Create inlet boundary conditions
     bc_inlets = {}
@@ -260,10 +281,11 @@ def create_bcs(NS_expressions, mesh, T, dt, t, V, Q, id_in, id_out, vel_t_ramp, 
     bc_p = [DirichletBC(Q, Constant(0), boundaries, ID) for ID in id_out]
 
     # No slip on walls
-    bc_wall = [DirichletBC(V, Constant(0.0), boundaries, 0)]
+    id_wall = 0
+    bc_wall = [DirichletBC(V, Constant(0.0), boundaries, id_wall)]
 
     #print wall area
-    wall_area = assemble(1 * ds(0))
+    wall_area = assemble(1 * ds(id_wall))
     if MPI.rank(MPI.comm_world) == 0:
         print("Wall area: ", wall_area)
 
@@ -324,15 +346,14 @@ def temporal_hook(mesh, dt, t, save_solution_frequency, u_, NS_expressions, id_i
                   u_mean2, n, inlet_area1, dsi1, probe_points, **NS_namespace):
     # Update inlet condition
     for ID in id_in:
-        NS_expressions["inlet_{}".format(ID)].update(t)
-        if MPI.rank(MPI.comm_world) == 0:
-            print("Inlet velocity updated at t = {} s".format(t))
+        for i in [0, 1, 2]:
+            NS_expressions["inlet_{}".format(ID)][i].set_t(t)
 
       # Assign velocity components to vector solution
     if tstep % dump_probe_frequency == 0:
         for i in range(3):
             assign(U.sub(i), u_[i])
-        print_probe_points(U, p_,  probe_points)
+        # print_probe_points(U, p_,  probe_points)
 
         if MPI.rank(MPI.comm_world) == 0:
             txt = "Solved for timestep {:d}, t = {:2.04f} in {:3.1f} s"
