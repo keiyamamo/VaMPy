@@ -41,14 +41,14 @@ def problem_parameters(commandline_kwargs, NS_parameters, scalar_components, Sch
         # Override some problem specific parameters
         # Parameters are in mm and ms
         cardiac_cycle = float(commandline_kwargs.get("cardiac_cycle", 951))
-        number_of_cycles = float(commandline_kwargs.get("number_of_cycles", 3))
+        number_of_cycles = float(commandline_kwargs.get("number_of_cycles", 2))
 
         NS_parameters.update(
             # Fluid parameters
             nu=3.3018868e-3,  # Viscosity [nu: 0.0035 Pa-s / 1060 kg/m^3 = 3.3018868E-6 m^2/s == 3.3018868E-3 mm^2/ms]
             # Geometry parameters
-            id_in=[2, 3],  # Inlet boundary IDs
-            id_out=[1],  # Outlet boundary IDs
+            id_in=[6, 2],  # Inlet boundary IDs
+            id_out=[1, 3, 4, 5],  # Outlet boundary IDs
             vel_t_ramp=0.0,  # Time for velocity ramp [ms]
             # Simulation parameters
             cardiac_cycle=cardiac_cycle,  # Run simulation for 1 cardiac cycles [ms]
@@ -183,76 +183,74 @@ def create_bcs(NS_expressions, mesh, T, dt, nu, V, Q, id_in, id_out, vel_t_ramp,
         print("Normal1: ", normal1)
         print("Normal2: ", normal2)
     
-    lva_velocity = [1.236939028,
-                    1.17627759,
-                    1.234735247,
-                    1.367625527,
-                    1.828087955,
-                    2.756815817,
-                    2.954866272,
-                    2.582471706,
-                    2.612504094,
-                    2.789172857,
-                    2.751943219,
-                    2.537608565,
-                    2.216625354,
-                    1.959661847,
-                    2.014512007,
-                    2.185305377,
-                    2.104249735,
-                    1.937521557,
-                    1.888590528,
-                    1.795442712,
-                    1.717181935,
-                    1.712310802,
-                    1.656324457,
-                    1.490383228,
-                    1.355708324,
-                    1.330630944,
-                    1.341179799,
-                    1.305363295,
-                    1.373789251,
-                    1.365679463]
+    lva_velocity = [0.848637616,
+                    0.80701909,
+                    0.847125648,
+                    0.938298849,
+                    1.254212349,
+                    1.891392824,
+                    2.027271038,
+                    1.77177903,
+                    1.792383614,
+                    1.913592303,
+                    1.888049839,
+                    1.740999381,
+                    1.520779612,
+                    1.344482404,
+                    1.382113934,
+                    1.499291641,
+                    1.443681085,
+                    1.329292421,
+                    1.29572188,
+                    1.23181514,
+                    1.178122082,
+                    1.174780102,
+                    1.136369058,
+                    1.022520303,
+                    0.93012271,
+                    0.912917651,
+                    0.920154996,
+                    0.895582053,
+                    0.942527649,
+                    0.936963696]
         
-    rva_velocity = [0.118213774,
-                    0.201655201,
-                    0.387122659,
-                    0.587477779,
-                    1.03360584,
-                    1.783667311,
-                    2.17390376,
-                    2.028387028,
-                    1.967790134,
-                    1.478832277,
-                    1.04178026,
-                    0.726936758,
-                    0.362403891,
-                    0.17585913,
-                    0.230160293,
-                    0.181719109,
-                    0.08840746,
-                    0.050778843,
-                    0.057213602,
-                    0.112046374,
-                    0.189366639,
-                    0.179315211,
-                    0.158788077,
-                    0.120272339,
-                    0.112118547,
-                    0.087385346,
-                    0.143221566,
-                    0.207035695,
-                    0.182162302,
-                    0.152864381]
+    rva_velocity = [0.247426581,
+                    0.422073122,
+                    0.810264593,
+                    1.229616588,
+                    2.163382059,
+                    3.7332934,
+                    4.550075292,
+                    4.245502431,
+                    4.118670492,
+                    3.095260393,
+                    2.180491478,
+                    1.521510309,
+                    0.758527135,
+                    0.368080821,
+                    0.481735522,
+                    0.380346012,
+                    0.185040665,
+                    0.10628233,
+                    0.119750561,
+                    0.234517943,
+                    0.396352626,
+                    0.375314551,
+                    0.332350363,
+                    0.251735247,
+                    0.234669003,
+                    0.182901337,
+                    0.299768979,
+                    0.433334731,
+                    0.381273636,
+                    0.319951809]
     
     len_v = len(lva_velocity)
     t_v = np.arange(len(lva_velocity))
-    num_t = int(T / dt)  # 30.000 timesteps = 3s (T) / 0.0001s (dt)
+    num_t = 1000
     tnew = np.linspace(0, len_v, num=num_t)
-    interp_lva = np.array(np.interp(tnew, t_v, lva_velocity))
-    t_values = tnew[:10000]
-    lva = interp_lva[:10000]
-
+    t_values = np.linspace(0, 951, num=num_t)
+    lva = np.array(np.interp(tnew, t_v, lva_velocity))
     # Inflow at lva
     tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundaries)
     flow_rate = lva * tmp_area
@@ -261,8 +259,8 @@ def create_bcs(NS_expressions, mesh, T, dt, nu, V, Q, id_in, id_out, vel_t_ramp,
 
     # Inflow at rva
     tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[1], boundaries)
-    interp_rva = np.array(np.interp(tnew, t_v, rva_velocity))
-    flow_rate = interp_rva[:10000] * tmp_area
+    interp_rva = np.array(np.interp(t_values, t_v, rva_velocity))
+    flow_rate = interp_rva * tmp_area
     inlet_rva = make_womersley_bcs(t_values, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
     NS_expressions[f"inlet_{id_in[1]}"] = inlet_rva
 
@@ -353,7 +351,7 @@ def temporal_hook(mesh, dt, t, save_solution_frequency, u_, NS_expressions, id_i
     if tstep % dump_probe_frequency == 0:
         for i in range(3):
             assign(U.sub(i), u_[i])
-        # print_probe_points(U, p_,  probe_points)
+        print_probe_points(U, p_,  probe_points)
 
         if MPI.rank(MPI.comm_world) == 0:
             txt = "Solved for timestep {:d}, t = {:2.04f} in {:3.1f} s"
@@ -362,6 +360,10 @@ def temporal_hook(mesh, dt, t, save_solution_frequency, u_, NS_expressions, id_i
     
     calculate_and_print_flow_properties(dt, mesh, u_, inlet_area1, nu, 1, n, dsi1, True)
 
+    inlet_averaged_velocity = assemble(inner(u_, n) * dsi1) / inlet_area1
+
+    if MPI.rank(MPI.comm_world) == 0:
+        print("Inlet averaged velocity: ", abs(inlet_averaged_velocity))
 
     # Save velocity and pressure for post-processing
     if tstep % save_solution_frequency == 0 and tstep >= save_solution_at_tstep:
