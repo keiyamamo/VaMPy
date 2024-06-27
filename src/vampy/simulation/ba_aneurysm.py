@@ -3,6 +3,7 @@ import os
 import pickle
 from pprint import pprint
 import numpy as np
+from scipy.interpolate import UnivariateSpline
 from dolfin import set_log_level, MPI
 
 from oasis.problems.NSfracStep import *
@@ -64,7 +65,7 @@ def problem_parameters(commandline_kwargs, NS_parameters, scalar_components, Sch
             folder="results_ba",
             mesh_path=commandline_kwargs["mesh_path"],
             # Solver parameters
-            velocity_degree=1,
+            velocity_degree=2,
             pressure_degree=1,
             use_krylov_solvers=True,
             krylov_solvers=dict(monitor_convergence=False)
@@ -245,23 +246,26 @@ def create_bcs(NS_expressions, mesh, T, dt, nu, V, Q, id_in, id_out, vel_t_ramp,
                     0.381273636,
                     0.319951809]
     
-    len_v = len(lva_velocity)
-    t_v = np.arange(len(lva_velocity))
-    num_t = 1000
-    tnew = np.linspace(0, len_v, num=num_t)
-    t_values = np.linspace(0, 951, num=num_t)
-    lva = np.array(np.interp(tnew, t_v, lva_velocity))
+    t_values = np.linspace(0, 951, len(lva_velocity))
+    spl = UnivariateSpline(t_values, lva_velocity, k=5)
+
+    tnew = np.linspace(0, 951, 1000)
+    spl.set_smoothing_factor(0.1)
+    lva = spl(tnew)
+
     # Inflow at lva
     tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[0], boundaries)
     flow_rate = lva * tmp_area
-    inlet_lva = make_womersley_bcs(t_values, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
+    inlet_lva = make_womersley_bcs(tnew, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
     NS_expressions[f"inlet_{id_in[0]}"] = inlet_lva
 
     # Inflow at rva
     tmp_area, tmp_center, tmp_radius, tmp_normal = compute_boundary_geometry_acrn(mesh, id_in[1], boundaries)
-    interp_rva = np.array(np.interp(t_values, t_v, rva_velocity))
-    flow_rate = interp_rva * tmp_area
-    inlet_rva = make_womersley_bcs(t_values, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
+    interp_rva = UnivariateSpline(t_values, rva_velocity, k=5)
+    interp_rva.set_smoothing_factor(0.1)
+    rva = interp_rva(tnew)
+    flow_rate = rva * tmp_area
+    inlet_rva = make_womersley_bcs(tnew, flow_rate, nu, tmp_center, tmp_radius, tmp_normal, V.ufl_element())
     NS_expressions[f"inlet_{id_in[1]}"] = inlet_rva
 
     # Initial condition
