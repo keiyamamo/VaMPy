@@ -130,7 +130,8 @@ class vmtkPickPointSeedSelector(vmtkSeedSelector):  # pragma: no cover
 
         self.vmtkRenderer.Renderer.AddActor(surfaceActor)
 
-        text = 'Please position the mouse and press space to add the top of the region of interest, \'u\' to undo\n'
+        text = 'Please position the mouse and press space to add the top of the region of interest, \'u\' to undo
+'
         guiText = VtkText(text)
         self.vmtkRenderer.Renderer.AddActor(guiText.text)
 
