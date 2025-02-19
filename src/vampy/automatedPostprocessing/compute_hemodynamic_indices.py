@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Simula Research Laboratory
+# SPDX-License-Identifier: GPL-3.0-or-later
 from os import path
 
 from dolfin import Function, VectorFunctionSpace, FunctionSpace, parameters, MPI, HDF5File, Mesh, XDMFFile, \
@@ -162,7 +164,8 @@ def compute_hemodynamic_indices(folder, nu, rho, dt, T, velocity_degree, save_fr
 
         # Update tau
         if MPI.rank(MPI.comm_world) == 0:
-            print("Update WSS \n")
+            print("Update WSS 
+")
         tau_prev.vector().zero()
         tau_prev.vector().axpy(1, tau.vector())
 

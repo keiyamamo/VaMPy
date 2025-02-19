@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Simula Research Laboratory
+# SPDX-License-Identifier: GPL-3.0-or-later
 import argparse
 import sys
 from os import remove, path
@@ -61,7 +63,9 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     # Get paths
     case_name = input_model.rsplit(path.sep, 1)[-1].rsplit('.')[0]
     dir_path = input_model.rsplit(path.sep, 1)[0]
-    print("\n--- Working on case:", case_name, "\n")
+    print("
+--- Working on case:", case_name, "
+")
 
     # Naming conventions
     base_path = path.join(dir_path, case_name)
@@ -90,12 +94,14 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     folder_extended_surfaces = base_path + "_extended"
 
     # Open the surface file.
-    print("--- Load model file\n")
+    print("--- Load model file
+")
     surface = read_polydata(input_model)
 
     # Scale surface
     if scale_factor is not None:
-        print(f"--- Scaling model by a factor {scale_factor}\n")
+        print(f"--- Scaling model by a factor {scale_factor}
+")
         surface = scale_surface(surface, scale_factor)
         resampling_step *= scale_factor
 
@@ -103,7 +109,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     is_capped = check_if_closed_surface(surface)
     if is_capped:
         if not path.isfile(file_name_clipped_model):
-            print("--- Clipping the models inlets and outlets.\n")
+            print("--- Clipping the models inlets and outlets.
+")
             # Value of gradients_limit should be generally low, to detect flat surfaces corresponding
             # to closed boundaries. Area_limit will set an upper limit of the detected area, may vary between models.
             # The circleness_limit parameters determines the detected regions' similarity to a circle, often assumed
@@ -136,7 +143,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     capped_surface = vmtk_cap_polydata(surface)
 
     # Get centerlines
-    print("--- Get centerlines\n")
+    print("--- Get centerlines
+")
     inlet, outlets = get_centers_for_meshing(surface, is_atrium, base_path)
     has_outlet = len(outlets) != 0
 
@@ -160,7 +168,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
         for i in range(len(regions) // 3):
             print(
                 f"--- Region to refine ({i + 1}): " +
-                f"{regions[3 * i]:.3f} {regions[3 * i + 1]:.3f} {regions[3 * i + 2]:.3f}\n"
+                f"{regions[3 * i]:.3f} {regions[3 * i + 1]:.3f} {regions[3 * i + 2]:.3f}
+"
             )
 
         centerline_region, _, _ = compute_centerlines(source, regions, file_name_refine_region_centerlines,
@@ -204,7 +213,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
 
     # Smooth surface
     if smoothing_method == "voronoi":
-        print("--- Smooth surface: Voronoi smoothing\n")
+        print("--- Smooth surface: Voronoi smoothing
+")
         if not path.isfile(file_name_surface_smooth):
             # Get Voronoi diagram
             if not path.isfile(file_name_voronoi):
@@ -252,7 +262,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
             surface = read_polydata(file_name_surface_smooth)
 
     elif smoothing_method in ["laplace", "taubin"]:
-        print(f"--- Smooth surface: {smoothing_method.capitalize()} smoothing\n")
+        print(f"--- Smooth surface: {smoothing_method.capitalize()} smoothing
+")
         if not path.isfile(file_name_surface_smooth):
             surface = vmtk_smooth_surface(surface, smoothing_method, iterations=smoothing_iterations, passband=0.1,
                                           relaxation=0.01)
@@ -263,13 +274,16 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
             surface = read_polydata(file_name_surface_smooth)
 
     elif smoothing_method == "no_smooth" or None:
-        print("--- No smoothing of surface\n")
+        print("--- No smoothing of surface
+")
 
     if edge_length is not None and moving_mesh:
         if path.exists(file_name_remeshed):
             remeshed = read_polydata(file_name_remeshed)
         else:
-            print("\n--- Remeshing surface for moving mesh\n")
+            print("
+--- Remeshing surface for moving mesh
+")
             surface = dist_sphere_constant(surface, centerlines, region_center, misr_max,
                                            file_name_distance_to_sphere_initial, edge_length)
 
@@ -282,7 +296,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     # Add flow extensions
     if add_flow_extensions:
         if not path.isfile(file_name_model_flow_ext):
-            print("--- Adding flow extensions\n")
+            print("--- Adding flow extensions
+")
             # Add extension normal on boundary for atrium models
             extension = "centerlinedirection" if is_atrium else "boundarynormal"
             if is_atrium:
@@ -322,7 +337,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     # Get new centerlines with the flow extensions
     if add_flow_extensions:
         if not path.isfile(file_name_flow_centerlines):
-            print("--- Compute the model centerlines with flow extension.\n")
+            print("--- Compute the model centerlines with flow extension.
+")
             # Capp surface with flow extensions
             capped_surface = vmtk_cap_polydata(surface_extended)
 
@@ -353,7 +369,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
         centerlines = extract_single_line(centerlines, 0, end_id=centerlines.GetNumberOfPoints() - n_id - 1)
 
     # Choose input for the mesh
-    print("--- Computing distance to sphere\n")
+    print("--- Computing distance to sphere
+")
     if path.isfile(file_name_distance_to_sphere):
         distance_to_sphere = read_polydata(file_name_distance_to_sphere)
     else:
@@ -378,7 +395,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
 
     # Compute mesh
     if not path.isfile(file_name_vtu_mesh):
-        print("--- Computing mesh\n")
+        print("--- Computing mesh
+")
         try:
             mesh, remeshed_surface = generate_mesh(distance_to_sphere, add_boundary_layer)
         except Exception:
@@ -389,7 +407,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
         assert remeshed_surface.GetNumberOfPoints() > 0, "No points in surface mesh, try to remesh."
 
         if mesh.GetNumberOfPoints() < remeshed_surface.GetNumberOfPoints():
-            print("--- An error occurred during meshing. Will attempt to re-mesh \n")
+            print("--- An error occurred during meshing. Will attempt to re-mesh 
+")
             mesh, remeshed_surface = generate_mesh(distance_to_sphere, add_boundary_layer)
 
         write_mesh(compress_mesh, file_name_surface_name, file_name_vtu_mesh, file_name_xml_mesh,
@@ -404,7 +423,8 @@ def run_pre_processing(input_model, verbose_print, smoothing_method, smoothing_f
     # Load updated parameters following meshing
     parameters = get_parameters(base_path)
 
-    print("--- Computing flow rates and flow split, and setting boundary IDs\n")
+    print("--- Computing flow rates and flow split, and setting boundary IDs
+")
     mean_inflow_rate = compute_flow_rate(is_atrium, inlet, parameters, flow_rate_factor)
 
     find_boundaries(base_path, mean_inflow_rate, network, mesh, verbose_print, is_atrium)

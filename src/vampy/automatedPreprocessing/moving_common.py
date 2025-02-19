@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Simula Research Laboratory
+# SPDX-License-Identifier: GPL-3.0-or-later
 from os import listdir, mkdir
 
 from morphman.common import *
@@ -226,7 +228,8 @@ def project_displacement(clamp_boundaries, distance, folder_extended_surfaces, f
 
     n_surfaces = len(extended_surfaces)
 
-    print("--- Projecting surfaces\n")
+    print("--- Projecting surfaces
+")
     points = np.zeros((surface_extended.GetNumberOfPoints(), 3, n_surfaces))
     for i in range(n_surfaces):
         model_path = path.join(folder_moved_surfaces, extended_surfaces[i])

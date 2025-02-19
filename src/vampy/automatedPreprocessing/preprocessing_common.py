@@ -1,3 +1,5 @@
+# Copyright (c) 2025 Simula Research Laboratory
+# SPDX-License-Identifier: GPL-3.0-or-later
 import gzip
 import json
 from os import path
@@ -627,8 +629,10 @@ def find_boundaries(model_path, mean_inflow_rate, network, mesh, verbose_print, 
             ids.append([cellEntityId, gamma])
             verbose_print(gamma)
             verbose_print(network.elements[closest].GetOutPointsx1()[0])
-        verbose_print('CellEntityId: %d\n' % cellEntityId)
-        verbose_print('meshPoint: %f, %f, %f\n' % (meshPoint[0], meshPoint[1], meshPoint[2]))
+        verbose_print('CellEntityId: %d
+' % cellEntityId)
+        verbose_print('meshPoint: %f, %f, %f
+' % (meshPoint[0], meshPoint[1], meshPoint[2]))
         verbose_print(ids)
 
     # Store information for the solver.
@@ -680,7 +684,8 @@ def setup_model_network(centerlines, file_name_probe_points, region_center, verb
         listProbePoints = ImportData.GetListProbePoints(centerlinesBranches, network, verbose_print)
         listProbePoints += region_center
 
-        print("--- Saving probes points in: %s\n" % file_name_probe_points)
+        print("--- Saving probes points in: %s
+" % file_name_probe_points)
         probe_points = np.array(listProbePoints)
         with open(file_name_probe_points, 'w') as outfile:
             json.dump(probe_points.tolist(), outfile)
